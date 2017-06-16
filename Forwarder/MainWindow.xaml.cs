@@ -13,23 +13,38 @@ namespace Forwarder
     public partial class MainWindow : Window
     {
         bool isRightResize = false;
-        //bool isLeftResize = false;
+        bool isLeftResize = false;
         bool isBottomResize = false;
+        bool isTopResize = false;
         bool isRightBottomResize = false;
+        bool isLeftTopResize = false;
+        bool isRightTopResize = false;
+        bool isLeftBottomResize = false;
         double positionRightResize = 0;
-        //double positionLeftResize = 0;
+        double positionLeftResize = 0;
         double positionBottomResize = 0;
+        double positionTopResize = 0;
         double positionXRightBottomResize = 0;
         double positionYRightBottomResize = 0;
+        double positionXLeftTopResize = 0;
+        double positionYLeftTopResize = 0;
+        double positionXRightTopResize = 0;
+        double positionYRightTopResize = 0;
+        double positionXLeftBottomResize = 0;
+        double positionYLeftBottomResize = 0;
 
-        const double minWidth = 100;
-        const double minHight = 100;
+        const double minWidth = 500;
+        const double minHight = 300;
 
         public MainWindow()
         {
             InitializeComponent();
+            Properties.Settings.Default.Maximized = false;
+            Properties.Settings.Default.Minimized = false;
+            Properties.Settings.Default.Save();
         }
 
+        #region Реализация кнопок управления
         private void Close_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.Close();
@@ -53,28 +68,11 @@ namespace Forwarder
         {
             if(Properties.Settings.Default.Maximized)
             {
-                this.Height = Properties.Settings.Default.Height;
-                this.Width = Properties.Settings.Default.Width;
-                this.Top = Properties.Settings.Default.Top;
-                this.Left = Properties.Settings.Default.Left;
-                Properties.Settings.Default.Maximized = false;
-                Properties.Settings.Default.Save();
-                this.body.Margin = new Thickness(20.0, 20.0, 20.0, 20.0);
+                SetWindowStage("Normal");
             }
             else
             {
-                Properties.Settings.Default.Height = this.Height;
-                Properties.Settings.Default.Width = this.Width;
-                Properties.Settings.Default.Top = this.Top;
-                Properties.Settings.Default.Left = this.Left;
-                Properties.Settings.Default.Maximized = true;
-                Properties.Settings.Default.Save();
-
-                this.Height = SystemParameters.WorkArea.Height;
-                this.Width = SystemParameters.WorkArea.Width;
-                this.Top = SystemParameters.WorkArea.Top;
-                this.Left = SystemParameters.WorkArea.Left;
-                this.body.Margin = new Thickness(0.0, 0.0, 0.0, 0.0);
+                SetWindowStage("Maximized");
             }
             
         }
@@ -84,33 +82,73 @@ namespace Forwarder
             this.WindowState = WindowState.Minimized;
         }
 
-        private void Header_MouseDown(object sender, MouseButtonEventArgs e)
+        private void SetWindowStage(String _stage)
         {
-            if(!Properties.Settings.Default.Maximized) this.DragMove();
+            switch (_stage)
+            {
+                case "Maximized":
+                    {
+                        Properties.Settings.Default.Height = this.Height;
+                        Properties.Settings.Default.Width = this.Width;
+                        Properties.Settings.Default.Top = this.Top;
+                        Properties.Settings.Default.Left = this.Left;
+
+                        this.Height = SystemParameters.WorkArea.Height;
+                        this.Width = SystemParameters.WorkArea.Width;
+                        this.Top = SystemParameters.WorkArea.Top;
+                        this.Left = SystemParameters.WorkArea.Left;
+                        this.body.Margin = new Thickness(0.0, 0.0, 0.0, 0.0);
+
+                        Properties.Settings.Default.Maximized = true;
+                        Properties.Settings.Default.Save();
+                        break;
+                    }
+
+                case "Normal":
+                    {
+                        this.body.Margin = new Thickness(20.0, 20.0, 20.0, 20.0);
+                        this.Height = Properties.Settings.Default.Height;
+                        this.Width = Properties.Settings.Default.Width;
+                        this.Top = Properties.Settings.Default.Top;
+                        this.Left = Properties.Settings.Default.Left;
+
+                        Properties.Settings.Default.Maximized = false;
+                        Properties.Settings.Default.Save();
+
+                        break;
+                    }
+            }
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
             if(this.WindowState == WindowState.Maximized)
             {
-                Properties.Settings.Default.Height = this.Height;
-                Properties.Settings.Default.Width = this.Width;
-                Properties.Settings.Default.Top = this.Top;
-                Properties.Settings.Default.Left = this.Left;
-                Properties.Settings.Default.Maximized = true;
-                Properties.Settings.Default.Save();
-
-                this.Height = SystemParameters.WorkArea.Height;
-                this.Width = SystemParameters.WorkArea.Width;
-                this.Top = SystemParameters.WorkArea.Top;
-                this.Left = SystemParameters.WorkArea.Left;
-                this.body.Margin = new Thickness(0.0, 0.0, 0.0, 0.0);
+                SetWindowStage("Maximized");
                 this.WindowState = WindowState.Normal;
             }
         }
+        #endregion
 
-        #region Resize Window
+        #region Реализация перемещения окна
+        private void Header_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount == 2)
+            {
+                if (!Properties.Settings.Default.Maximized)
+                {
+                    SetWindowStage("Maximized");
+                }
+                else
+                {
+                    SetWindowStage("Normal");
+                }
+            }
+            else if (!Properties.Settings.Default.Maximized) this.DragMove();
+        }
+        #endregion
 
+        #region Реализация изменения размеров окна
         private void RightResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (isRightResize && !Properties.Settings.Default.Maximized)
@@ -142,7 +180,68 @@ namespace Forwarder
             }
         }
 
-        /*private void LeftResize_MouseMove(object sender, MouseEventArgs e)
+        private void LeftTopResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isLeftTopResize && !Properties.Settings.Default.Maximized)
+            {
+                double newWidth = this.Width - (e.GetPosition(this).X - positionXLeftTopResize);
+                double newHeight = this.Height - (e.GetPosition(this).Y - positionYLeftTopResize);
+                double newLeft = this.Left + (e.GetPosition(this).X - positionXLeftTopResize);
+                double newTop = this.Top + (e.GetPosition(this).Y - positionYLeftTopResize);
+                if (newWidth > minWidth + 40)
+                {
+                    this.Width = newWidth;
+                    this.Left = newLeft;
+                }
+                if (newHeight > minHight + 40)
+                {
+                    this.Height = newHeight;
+                    this.Top = newTop;
+                }
+            }
+        }
+
+        private void LeftBottomResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isLeftBottomResize && !Properties.Settings.Default.Maximized)
+            {
+                double newWidth = this.Width - (e.GetPosition(this).X - positionXLeftBottomResize);
+                double newHeight = this.Height + (e.GetPosition(this).Y - positionYLeftBottomResize);
+                double newLeft = this.Left + (e.GetPosition(this).X - positionXLeftBottomResize);
+                if (newWidth > minWidth + 40)
+                {
+                    this.Width = newWidth;
+                    this.Left = newLeft;
+                }
+                if (newHeight > minHight + 40)
+                {
+                    this.Height = newHeight;
+                    positionYLeftBottomResize = e.GetPosition(this).Y;
+                }
+            }
+        }
+
+        private void RightTopResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isRightTopResize && !Properties.Settings.Default.Maximized)
+            {
+                double newWidth = this.Width + (e.GetPosition(this).X - positionXRightTopResize);
+                double newHeight = this.Height - (e.GetPosition(this).Y - positionYRightTopResize);
+                double newTop = this.Top + (e.GetPosition(this).Y - positionYRightTopResize);
+                if (newWidth > minWidth + 40)
+                {
+                    this.Width = newWidth;
+                    positionXRightTopResize = e.GetPosition(this).X;
+                }
+                if (newHeight > minHight + 40)
+                {
+                    this.Height = newHeight;
+                    this.Top = newTop;
+                }
+            }
+        }
+
+        private void LeftResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (isLeftResize && !Properties.Settings.Default.Maximized)
             {
@@ -154,7 +253,7 @@ namespace Forwarder
                     this.Left = newLeft;
                 }
             }
-        }*/
+        }
 
         private void BottomResize_MouseMove(object sender, MouseEventArgs e)
         {
@@ -169,6 +268,20 @@ namespace Forwarder
             }
         }
 
+        private void TopResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isTopResize && !Properties.Settings.Default.Maximized)
+            {
+                double newHeight = this.Height - (e.GetPosition(this).Y - positionTopResize);
+                double newTop = this.Top + (e.GetPosition(this).Y - positionTopResize);
+                if (newHeight > minHight + 40)
+                {
+                    this.Height = newHeight;
+                    this.Top = newTop;
+                }
+            }
+        }
+
         private void Resize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Rectangle rect = (Rectangle)sender;
@@ -179,18 +292,37 @@ namespace Forwarder
                     isRightResize = true;
                     positionRightResize = e.GetPosition(this).X;
                     break;
-                /*case "leftResize":
+                case "leftResize":
                     isLeftResize = true;
                     positionLeftResize = e.GetPosition(this).X;
-                    break;*/
+                    break;
                 case "bottomResize":
                     isBottomResize = true;
                     positionBottomResize = e.GetPosition(this).Y;
+                    break;
+                case "topResize":
+                    isTopResize = true;
+                    positionTopResize = e.GetPosition(this).Y;
                     break;
                 case "rightBottomResize":
                     isRightBottomResize = true;
                     positionXRightBottomResize = e.GetPosition(this).X;
                     positionYRightBottomResize = e.GetPosition(this).Y;
+                    break;
+                case "leftTopResize":
+                    isLeftTopResize = true;
+                    positionXLeftTopResize = e.GetPosition(this).X;
+                    positionYLeftTopResize = e.GetPosition(this).Y;
+                    break;
+                case "rightTopResize":
+                    isRightTopResize = true;
+                    positionXRightTopResize = e.GetPosition(this).X;
+                    positionYRightTopResize = e.GetPosition(this).Y;
+                    break;
+                case "leftBottomResize":
+                    isLeftBottomResize = true;
+                    positionXLeftBottomResize = e.GetPosition(this).X;
+                    positionYLeftBottomResize = e.GetPosition(this).Y;
                     break;
             } 
         }
@@ -204,18 +336,29 @@ namespace Forwarder
                 case "rightResize":
                     isRightResize = false;
                     break;
-                /*case "leftResize":
+                case "leftResize":
                     isLeftResize = false;
-                    break;*/
+                    break;
                 case "bottomResize":
                     isBottomResize = false;
+                    break;
+                case "topResize":
+                    isTopResize = false;
                     break;
                 case "rightBottomResize":
                     isRightBottomResize = false;
                     break;
+                case "leftTopResize":
+                    isLeftTopResize = false;
+                    break;
+                case "rightTopResize":
+                    isRightTopResize = false;
+                    break;
+                case "leftBottomResize":
+                    isLeftBottomResize = false;
+                    break;
             }
         }
-
         #endregion
    
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Forwarder"
         mc:Ignorable="d"
-        Title="Forwarder Tool 1.0" Height="439" Width="725" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" StateChanged="Window_StateChanged" WindowStartupLocation="CenterScreen">
+        Title="Forwarder Tool 1.0" Height="600" Width="1000" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" StateChanged="Window_StateChanged" WindowStartupLocation="CenterScreen" Foreground="#FF232323" Activated="Window_Activated" Deactivated="Window_Deactivated" FontFamily="/Forwarder;component/Resources/#Helvetica CE">
     <Grid x:Name="body" Margin="20">
         <Rectangle x:Name="leftResize" Fill="#00000000" Margin="-5,0" StrokeThickness="0" Cursor="SizeWE" MouseMove="LeftResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" HorizontalAlignment="Left" Width="5"/>
         <Rectangle x:Name="topResize" Fill="#00000000" Margin="0,-5" StrokeThickness="0" Cursor="SizeNS" MouseMove="TopResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Height="5" VerticalAlignment="Top"/>
@@ -15,13 +15,23 @@
         <Rectangle x:Name="leftTopResize" Fill="#00000000" StrokeThickness="0" Cursor="SizeNWSE" MouseMove="LeftTopResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Width="10" HorizontalAlignment="Left" Height="10" VerticalAlignment="Top" Margin="-5,-5,0,0"/>
         <Rectangle x:Name="rightTopResize" Fill="#00000000" StrokeThickness="0" Cursor="SizeNESW" MouseMove="RightTopResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Width="10" HorizontalAlignment="Right" Height="10" VerticalAlignment="Top" Margin="0,-5,-5,0"/>
         <Rectangle x:Name="leftBottomResize" Fill="#00000000" StrokeThickness="0" Cursor="SizeNESW" MouseMove="LeftBottomResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Width="10" HorizontalAlignment="Left" Height="10" VerticalAlignment="Bottom" Margin="-5,0,0,-5"/>
-        <Rectangle Fill="#FFF9F9F9" Margin="0" Stroke="#FF2B2B2B" RadiusX="5" RadiusY="5">
+        <Rectangle x:Name="background" Fill="#FFF9F9F9" Margin="0" Stroke="#FF3C3C3C" RadiusX="5" RadiusY="5">
             <Rectangle.Effect>
                 <DropShadowEffect Color="#7F000000" BlurRadius="14" ShadowDepth="0" Direction="313" Opacity="0.75"/>
             </Rectangle.Effect>
         </Rectangle>
-        <Rectangle Fill="#FF2B2B2B" Height="24" Margin="0" RadiusY="5" RadiusX="5" Stroke="#FF2B2B2B" VerticalAlignment="Top"/>
-        <Border x:Name="header" BorderThickness="1" Height="24" Margin="0" VerticalAlignment="Top" CornerRadius="5,5,0,0" Background="#FF2B2B2B" MouseLeftButtonDown="Header_MouseDown" BorderBrush="#FF2B2B2B">
+        <Rectangle Fill="#FF454545" Height="24" Margin="0" RadiusY="5" RadiusX="5" Stroke="#FF454545" VerticalAlignment="Top"/>
+        <Border x:Name="header" BorderThickness="1" Height="24" Margin="0" VerticalAlignment="Top" CornerRadius="5,5,0,0" MouseLeftButtonDown="Header_MouseDown" BorderBrush="#FF3C3C3C">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStopCollection>
+                            <GradientStop Color="#FF454545" Offset="0.0" />
+                            <GradientStop Color="#FF404040" Offset="1.0" />
+                        </GradientStopCollection>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Border.Background>
             <Grid>
                 <Border x:Name="headerButton" BorderThickness="1" Margin="0,1,6,-1" HorizontalAlignment="Right" Width="75" MouseEnter="HeaderButton_MouseEnter" MouseLeave="HeaderButton_MouseLeave" Background="#00000000">
                     <Grid Margin="0">
@@ -42,8 +52,47 @@
                         </Rectangle>
                     </Grid>
                 </Border>
-                <Label Content="FORWARDER Tools 1.0 by Daniel Sandrutski" Margin="75,-1,75,-2" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="11" Foreground="#7FFFFFFF"/>
+                <Label Content="FORWARDER Tools 1.0 by Daniel Sandrutski" Margin="75,-1,75,-2" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="11" Foreground="#99FFFFFF"/>
             </Grid>
         </Border>
+        <Grid x:Name="Content" Margin="1,24,1,1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="#FFE8E8E8" BorderThickness="0,0,1,0" Margin="0" Background="#FFF0F0F0" CornerRadius="0,0,0,5">
+                <Grid>
+                    <StackPanel Margin="0,0,0,164">
+                        <Grid x:Name="mainPage" Height="50" Background="#FFC8C8C8" MouseLeftButtonDown="mainPage_MouseLeftButtonDown">
+                            <Image Source="Resources/server-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Height="159" VerticalAlignment="Bottom">
+                        <Grid x:Name="aboutMessageBotton" Height="50" Margin="0" MouseLeftButtonDown="AboutMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="AboutMessageBotton_MouseLeftButtonUp" ToolTip="О программе">
+                            <Image Margin="0" Cursor="Hand" Height="40" Source="Resources/about-icon.png"/>
+                        </Grid>
+                        <Grid x:Name="settingMessageBotton" Height="50" Margin="00" MouseLeftButtonDown="SettingMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="SettingMessageBotton_MouseLeftButtonUp" ToolTip="Настройки">
+                            <Image Margin="0" Cursor="Hand" Height="40" Source="Resources/settings-icon.png"/>
+                        </Grid>
+                        <Grid x:Name="exitMessageBotton" Height="50" Margin="0" MouseLeftButtonDown="ExitMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="ExitMessageBotton_MouseLeftButtonUp" ToolTip="Завершить работу сервера">
+                            <Image Margin="0" Cursor="Hand" Height="40" Source="Resources/exit-icon.png"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <TabControl x:Name="tcPages" Margin="0,0,5,5" TabStripPlacement="Right" Background="#FFF9F9F9" BorderBrush="{x:Null}" Grid.Column="1" SelectionChanged="TCPages_SelectionChanged" SelectedIndex="0">
+                <TabItem Header="MainPage" Height="0" Width="0">
+                    <Grid>
+                        <Label Content="Введите сообщение:" HorizontalAlignment="Left" Margin="34,23,0,0" VerticalAlignment="Top" Height="28" VerticalContentAlignment="Center" Width="132" Grid.Column="1"/>
+                        <Button Style ="{StaticResource ButtonStyle}" Content="Отправить сообщение" HorizontalAlignment="Right" Margin="0,26,20,0" VerticalAlignment="Top" Width="182" HorizontalContentAlignment="Center" Click="Button_Click" Cursor="Hand" Grid.Column="1"/>
+                        <TextBox x:Name="tfTextMessage" Style="{StaticResource TextBoxStyle}" Height="28" Margin="171,23,207,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF232323" VerticalContentAlignment="Center" Grid.Column="1"/>
+                        <ListBox x:Name="lbMessages" Margin="34,56,20,20" Grid.Column="1"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            
+        </Grid>
     </Grid>
 </Window>

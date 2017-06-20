@@ -53,6 +53,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -74,6 +75,47 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdditionalWindows\Authorization.xaml.cs">
+      <DependentUpon>Authorization.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\CreateAccount.xaml.cs">
+      <DependentUpon>CreateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Dialog.cs" />
+    <Compile Include="Dialogs\InformationMessageDialog.xaml.cs">
+      <DependentUpon>InformationMessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\WarningMessageDialog.xaml.cs">
+      <DependentUpon>WarningMessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\Client.cs" />
+    <Compile Include="Sources\Cryptography.cs" />
+    <Compile Include="Sources\Functions.cs" />
+    <Compile Include="Sources\Message.cs" />
+    <Page Include="AdditionalWindows\Authorization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\CreateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ErrorMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\InformationMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\WarningMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\YesNoMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,6 +123,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ErrorMessageDialog.xaml.cs">
+      <DependentUpon>ErrorMessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\YesNoMessageDialog.xaml.cs">
+      <DependentUpon>YesNoMessageDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -143,6 +191,48 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\shield-error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\nofocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\shield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\about-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\acc-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\account.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\exit-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gmessage-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\light-bulb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\server-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\settings-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\shield-warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

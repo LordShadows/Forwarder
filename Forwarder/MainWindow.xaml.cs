@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Controls;
 
 namespace Forwarder
 {
@@ -12,6 +13,7 @@ namespace Forwarder
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Объявление переменных для изменения размеров окна
         bool isRightResize = false;
         bool isLeftResize = false;
         bool isBottomResize = false;
@@ -32,9 +34,12 @@ namespace Forwarder
         double positionYRightTopResize = 0;
         double positionXLeftBottomResize = 0;
         double positionYLeftBottomResize = 0;
+        #endregion
 
         const double minWidth = 500;
         const double minHight = 300;
+
+        Sources.Client CLIENT;
 
         public MainWindow()
         {
@@ -42,12 +47,15 @@ namespace Forwarder
             Properties.Settings.Default.Maximized = false;
             Properties.Settings.Default.Minimized = false;
             Properties.Settings.Default.Save();
+
+            CLIENT = new Sources.Client();
+            Sources.Functions.MAINWINDOW = this;
         }
 
         #region Реализация кнопок управления
         private void Close_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void HeaderButton_MouseEnter(object sender, MouseEventArgs e)
@@ -59,9 +67,18 @@ namespace Forwarder
 
         private void HeaderButton_MouseLeave(object sender, MouseEventArgs e)
         {
-            close.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\close-normal.png", UriKind.Relative)));
-            min.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\min-normal.png", UriKind.Relative)));
-            max.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\max-normal.png", UriKind.Relative)));
+            if (this.IsActive)
+            {
+                close.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\close-normal.png", UriKind.Relative)));
+                min.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\min-normal.png", UriKind.Relative)));
+                max.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\max-normal.png", UriKind.Relative)));
+            }
+            else
+            {
+                close.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+                min.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+                max.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+            }
         }
 
         private void Max_MouseDown(object sender, MouseButtonEventArgs e)
@@ -360,6 +377,84 @@ namespace Forwarder
             }
         }
         #endregion
-   
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CLIENT.SendMessage("Message", new String[] { tfTextMessage.Text });
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            close.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\close-normal.png", UriKind.Relative)));
+            min.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\min-normal.png", UriKind.Relative)));
+            max.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\max-normal.png", UriKind.Relative)));
+            LinearGradientBrush linearGradientBrush = new LinearGradientBrush()
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(0, 1)
+            };
+            linearGradientBrush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF454545"), 0.0));
+            linearGradientBrush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF404040"), 1.0));
+            header.Background = linearGradientBrush;
+            header.BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF3C3C3C"));
+            background.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF3C3C3C"));
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            close.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+            min.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+            max.Fill = new ImageBrush(new BitmapImage(new Uri(@"Resources\nofocus.png", UriKind.Relative)));
+            header.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF6F6F6"));
+            header.BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
+            background.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
+        }
+
+        private void TCPages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (tcPages.SelectedIndex)
+            {
+                case 0:
+                    mainPage.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC8C8C8"));
+                    //userBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
+                    break;
+            }
+        }
+
+        private void SettingMessageBotton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            settingMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC8C8C8"));
+        }
+
+        private void SettingMessageBotton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            settingMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
+        }
+
+        private void ExitMessageBotton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            exitMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC8C8C8"));
+            App.Current.Shutdown();
+        }
+
+        private void ExitMessageBotton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            exitMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
+        }
+
+        private void AboutMessageBotton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            aboutMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC8C8C8"));
+        }
+
+        private void AboutMessageBotton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            aboutMessageBotton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
+        }
+
+        private void mainPage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            tcPages.SelectedIndex = 0;
+        }
     }
 }

@@ -47,8 +47,6 @@ namespace Forwarder
             Properties.Settings.Default.Maximized = false;
             Properties.Settings.Default.Minimized = false;
             Properties.Settings.Default.Save();
-
-            CLIENT = new Sources.Client();
             Sources.Functions.MAINWINDOW = this;
         }
 
@@ -380,7 +378,7 @@ namespace Forwarder
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CLIENT.SendMessage("Message", new String[] { tfTextMessage.Text });
+            
         }
 
         private void Window_Activated(object sender, EventArgs e)
@@ -398,6 +396,7 @@ namespace Forwarder
             header.Background = linearGradientBrush;
             header.BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF3C3C3C"));
             background.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF3C3C3C"));
+            mainTitle.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#99FFFFFF"));
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -408,6 +407,7 @@ namespace Forwarder
             header.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF6F6F6"));
             header.BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
             background.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
+            mainTitle.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
         }
 
         private void TCPages_SelectionChanged(object sender, SelectionChangedEventArgs e)

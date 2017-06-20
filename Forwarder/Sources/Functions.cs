@@ -9,18 +9,31 @@ namespace Forwarder.Sources
     class Functions
     {
         public static MainWindow MAINWINDOW;
+        public static AdditionalWindows.Authorization AUTHORIZATION;
 
-        public static void AddJournalEntry(String entry)
+        public static void AuthenticationAttempt(String result)
         {
-            MAINWINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+            switch (result)
             {
-                MAINWINDOW.lbMessages.Items.Add($"> {DateTime.Now.ToString()} {entry}");
-            }));
+                case "Yes":
+                    AUTHORIZATION.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+                    {
+                        AUTHORIZATION.isAuthorization = true;
+                        AUTHORIZATION.Close();
+                    }));
+                    break;
+                case "No":
+                    AUTHORIZATION.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+                    {
+                        AUTHORIZATION.lError.Content = "Неправильно введен логин или пароль.";
+                    }));
+                    break;
+            }
         }
 
         public static void Shutdown()
         {
-            MAINWINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+            Dialogs.Dialog.WINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
             {
                 App.Current.Shutdown();
             }));

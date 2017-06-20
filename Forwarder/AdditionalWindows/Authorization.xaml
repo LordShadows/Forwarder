@@ -5,8 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Forwarder.AdditionalWindows"
         mc:Ignorable="d"
-        Title="Authorization" Height="300" Width="300">
-    <Grid>
-        
+        Title="Авторизация" Height="268" Width="566" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#00000000" FontFamily="/Forwarder;component/Resources/#Helvetica CE" AllowsTransparency="True" WindowStyle="None" Activated="Window_Activated" Deactivated="Window_Deactivated">
+    <Grid x:Name="body" Margin="20">
+        <Rectangle x:Name="background" Fill="#FFECECEC" Margin="0" Stroke="#FF3C3C3C" RadiusX="5" RadiusY="5">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="#7F000000" BlurRadius="14" ShadowDepth="0" Direction="313" Opacity="0.75"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle Fill="#FF454545" Height="24" Margin="0" RadiusY="5" RadiusX="5" Stroke="#FF454545" VerticalAlignment="Top"/>
+        <Border x:Name="header" BorderThickness="1" Height="24" Margin="0" VerticalAlignment="Top" CornerRadius="5,5,0,0" MouseLeftButtonDown="Header_MouseDown" BorderBrush="#FF3C3C3C">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStopCollection>
+                            <GradientStop Color="#FF454545" Offset="0.0" />
+                            <GradientStop Color="#FF404040" Offset="1.0" />
+                        </GradientStopCollection>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Image HorizontalAlignment="Left" Height="90" Margin="11,29,0,0" VerticalAlignment="Top" Width="90" Source="/Forwarder;component/Resources/lock.png"/>
+        <Label Content="Для доступа в систему необходимо авторизироваться." HorizontalAlignment="Left" Margin="105,35,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Логин:" HorizontalAlignment="Left" Margin="105,102,0,0" VerticalAlignment="Top"/>
+        <Label Content="Пароль:" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="tbPassword" Style="{StaticResource PasswordBoxStyle}" Margin="160,131,0,0" VerticalAlignment="Top" Height="28" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="235" PasswordChanged="TBPassword_PasswordChanged"/>
+        <TextBox x:Name="tbLogin" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Height="28" Margin="160,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="235" VerticalContentAlignment="Center" TextChanged="TBLogin_TextChanged"/>
+        <Button x:Name="bAddUser" Content="Создать пользователя" Style ="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="108,186,0,0" Width="158" Cursor="Hand" Height="22" VerticalAlignment="Top" IsEnabled="False"/>
+        <Button x:Name="bCancel" Content="Отмена" Style ="{StaticResource ButtonStyle}" Margin="0,186,127,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="90" Cursor="Hand" Click="BCancel_Click"/>
+        <Button x:Name="bGo" Content="Войти" Style ="{StaticResource MainButtonStyle}" Margin="0,186,25,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="90" Cursor="Hand" IsDefault="True" IsEnabled="False" Click="BGo_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="108,62,0,0" TextWrapping="Wrap" Text="Если у Вас есть логин и пароль, введите их здесь. Если у Вас их нет, нажмите &quot;Создать пользователя&quot;." VerticalAlignment="Top" Width="409" Height="32" FontSize="11"/>
+        <Label x:Name="lError" Content="Поле логин не заполнено. Поле пароль не заполнено." HorizontalAlignment="Left" Margin="105,155,0,0" VerticalAlignment="Top" FontSize="11" Foreground="Red"/>
     </Grid>
 </Window>

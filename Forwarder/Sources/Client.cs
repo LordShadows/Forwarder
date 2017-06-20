@@ -9,15 +9,14 @@ namespace Forwarder.Sources
 {
     class Client
     {
-        private Socket SERVERSOCKET;
-        private Thread LISTENTHREAD;
-        private const String HOST = "127.0.0.1";
-        private const int PORT= 22222;
+        static private Socket SERVERSOCKET;
+        static private Thread LISTENTHREAD;
+        static private String HOST = "127.0.0.1";
+        static private int PORT= 22222;
 
-        Cryptography cryptography;
-        Functions function;
+        static Cryptography cryptography;
 
-        public Client()
+        static public bool InitClient()
         {
             try
             {
@@ -31,51 +30,57 @@ namespace Forwarder.Sources
                 LISTENTHREAD.Start();
 
                 cryptography = new Cryptography();
-                function = new Functions();
+                return true;
             }
             catch
             {
-                System.Windows.MessageBox.Show("Связь с сервером не установлена.");
-                App.Current.Shutdown();
+                Dialogs.Dialog.ShowDialogError("Связь с сервером не установлена. Сервер выключен или недоступен. Попробуйте позже.", "Ошибка соединения");
+                return false;
             }
         }
 
-        public void SendMessage(String keyword, String[] textArguments)
+        static public void SendMessage(String keyword, String[] textArguments)
         {
             String signature = cryptography.GetHash(textArguments);
             Message message = new Message(keyword, textArguments, signature);
             String json = JsonConvert.SerializeObject(message);
-            SERVERSOCKET.Send(cryptography.EncryptAES(json));
+            SERVERSOCKET.Send(Encoding.UTF8.GetBytes(cryptography.Encrypt_AES_String(json)));
         }
 
-        public void Send(string Buffer)
+        static public void Send(string Buffer)
         {
-            SERVERSOCKET.Send(Encoding.Unicode.GetBytes(Buffer));
+            SERVERSOCKET.Send(Encoding.UTF8.GetBytes(Buffer));
         }
 
-        public void HandleCommand(Message message)
+        static public void HandleCommand(Message message)
         {
             try
             {
+                if (cryptography.GetHash(message.TextArguments) != message.Signature)
+                {
+                    Dialogs.Dialog.ShowError("Целостность принятого пакета нарушена.", "Ошибка обработки");
+                    return;
+                }
                 switch (message.Keyword)
                 {
-                    case "Message":
-                        Functions.AddJournalEntry(message.TextArguments[0]);
+                    case "AuthenticationAttempt":
+                        Functions.AuthenticationAttempt(message.TextArguments[0]);
                         break;
                 }   
             }
             catch (NullReferenceException ignore)
             {
-                System.Windows.MessageBox.Show("Связь с сервером прервана");
+                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено.", "Ошибка соединения");
                 Functions.Shutdown();
             }
             catch (Exception exp)
             {
-                System.Windows.MessageBox.Show("Error with handleCommand: " + exp.Message);
+                Dialogs.Dialog.ShowError("Ошибка обработки команды сервера.", "Ошибка обработки");
+                Console.WriteLine("Ошибка обработки команды сервера: " + exp.Message);
             }
         }
 
-        public void HandleDirectiveCommand(String message)
+        static public void HandleDirectiveCommand(String message)
         {
             try
             {
@@ -88,16 +93,17 @@ namespace Forwarder.Sources
             }
             catch (NullReferenceException ignore)
             {
-                System.Windows.MessageBox.Show("Связь с сервером прервана");
+                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено.", "Ошибка соединения");
                 Functions.Shutdown();
             }
             catch (Exception exp)
             {
-                System.Windows.MessageBox.Show("Error with HandleDirectiveCommand: " + exp.Message);
+                Dialogs.Dialog.ShowError("Ошибка обработки директивы сервера.", "Ошибка обработки");
+                Console.WriteLine("Ошибка обработки директивы сервера: " + exp.Message);
             }
         }
 
-        public void Listner()
+        static public void Listner()
         {
             try
             {
@@ -105,16 +111,16 @@ namespace Forwarder.Sources
                 {
                     byte[] buffer = new byte[4096];
                     int bytesReceive = SERVERSOCKET.Receive(buffer);
-                    String message = Encoding.Unicode.GetString(buffer, 0, bytesReceive);
+                    String message = Encoding.UTF8.GetString(buffer, 0, bytesReceive);
                     if (message.Contains("$Directives$"))
                         HandleDirectiveCommand(message);
                     else
-                        HandleCommand(JsonConvert.DeserializeObject<Message>(cryptography.DecryptAES(Encoding.Unicode.GetBytes(message))));
+                        HandleCommand(JsonConvert.DeserializeObject<Message>(cryptography.Decrypt_AES_String(message)));
                 }
             }
             catch
             {
-                System.Windows.MessageBox.Show("Связь с сервером прервана");
+                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено.", "Ошибка соединения");
                 Functions.Shutdown();
             }
         }

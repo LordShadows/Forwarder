@@ -52,7 +52,7 @@
                         </Rectangle>
                     </Grid>
                 </Border>
-                <Label Content="FORWARDER Tools 1.0 by Daniel Sandrutski" Margin="75,-1,75,-2" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="11" Foreground="#99FFFFFF"/>
+                <Label x:Name="mainTitle" Content="FORWARDER Tools 1.0 by Daniel Sandrutski" Margin="75,-1,75,-2" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="11" Foreground="#99FFFFFF"/>
             </Grid>
         </Border>
         <Grid x:Name="Content" Margin="1,24,1,1">

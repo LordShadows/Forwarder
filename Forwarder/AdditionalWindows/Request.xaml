@@ -76,7 +76,7 @@
         <Button x:Name="bAdd" Content="Подать заявку" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,442,23,0" VerticalAlignment="Top" Width="122" Height="22" Cursor="Hand" Click="BAdd_Click"/>
         <Button x:Name="bOK" Content="OK" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,442,23,0" VerticalAlignment="Top" Width="80" Height="22" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BOK_Click"/>
         <Label x:Name="lErrorMessage" Content="" Margin="111,412,436,0" VerticalAlignment="Top" Foreground="Red"/>
-        <Button Content="Показать на карте" Style="{StaticResource ButtonStyle}" Margin="0,202,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" Height="22" Cursor="Hand"/>
+        <Button Content="Показать на карте" Style="{StaticResource ButtonStyle}" Margin="0,202,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" Height="22" Cursor="Hand" Click="Button_Click"/>
         <Image HorizontalAlignment="Left" Height="80" Margin="19,29,0,0" VerticalAlignment="Top" Width="80" Source="/Forwarder;component/Resources/box-full.png"/>
         <Label Content="Для того, чтобы добавить заявку, необходимо заполнить все поля, отмеченные *, и нажать кнопку  &quot;Подать заявку &quot;." HorizontalAlignment="Left" Margin="111,35,0,0" VerticalAlignment="Top" FontSize="11"/>
         <Button x:Name="bCancel" Content="Отмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,442,164,0" VerticalAlignment="Top" Width="80" Height="22" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BCancel_Click"/>

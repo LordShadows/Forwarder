@@ -19,29 +19,6 @@ namespace Forwarder.AdditionalWindows
     /// </summary>
     public partial class Map : Window
     {
-        #region Объявление переменных для изменения размеров окна
-        bool isRightResize = false;
-        bool isLeftResize = false;
-        bool isBottomResize = false;
-        bool isTopResize = false;
-        bool isRightBottomResize = false;
-        bool isLeftTopResize = false;
-        bool isRightTopResize = false;
-        bool isLeftBottomResize = false;
-        double positionRightResize = 0;
-        double positionLeftResize = 0;
-        double positionBottomResize = 0;
-        double positionTopResize = 0;
-        double positionXRightBottomResize = 0;
-        double positionYRightBottomResize = 0;
-        double positionXLeftTopResize = 0;
-        double positionYLeftTopResize = 0;
-        double positionXRightTopResize = 0;
-        double positionYRightTopResize = 0;
-        double positionXLeftBottomResize = 0;
-        double positionYLeftBottomResize = 0;
-        #endregion
-
         private const double minWidth = 900;
         private const double minHight = 600;
 
@@ -51,13 +28,16 @@ namespace Forwarder.AdditionalWindows
         private double LEFT = 0;
         private bool Maximized = false;
 
-        public Map()
+        public Map(String place)
         {
             InitializeComponent();
             this.Height = SystemParameters.WorkArea.Height * 0.75;
             this.Width = SystemParameters.WorkArea.Width * 0.75;
             this.Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height * 0.125;
             this.Left = SystemParameters.WorkArea.Left + SystemParameters.WorkArea.Width * 0.125;
+
+            webBrowser.Navigate(new Uri("https://maps.google.com/maps?q=" + place.Replace(",", "").Replace("д.", "").Replace("ул.", "").Replace("просп.", "")));
+            mainTitle.Content = "Карты - " + place;
         }
 
         #region Реализация кнопок управления
@@ -171,220 +151,6 @@ namespace Forwarder.AdditionalWindows
         }
         #endregion
 
-        #region Реализация изменения размеров окна
-        private void RightResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isRightResize && !Maximized)
-            {
-                double newWidth = this.Width + (e.GetPosition(this).X - positionRightResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    positionRightResize = e.GetPosition(this).X;
-                }
-            }
-        }
-
-        private void RightBottomResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isRightBottomResize && !Maximized)
-            {
-                double newWidth = this.Width + (e.GetPosition(this).X - positionXRightBottomResize);
-                double newHeight = this.Height + (e.GetPosition(this).Y - positionYRightBottomResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    positionXRightBottomResize = e.GetPosition(this).X;
-                }
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    positionYRightBottomResize = e.GetPosition(this).Y;
-                }
-            }
-        }
-
-        private void LeftTopResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isLeftTopResize && !Maximized)
-            {
-                double newWidth = this.Width - (e.GetPosition(this).X - positionXLeftTopResize);
-                double newHeight = this.Height - (e.GetPosition(this).Y - positionYLeftTopResize);
-                double newLeft = this.Left + (e.GetPosition(this).X - positionXLeftTopResize);
-                double newTop = this.Top + (e.GetPosition(this).Y - positionYLeftTopResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    this.Left = newLeft;
-                }
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    this.Top = newTop;
-                }
-            }
-        }
-
-        private void LeftBottomResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isLeftBottomResize && !Maximized)
-            {
-                double newWidth = this.Width - (e.GetPosition(this).X - positionXLeftBottomResize);
-                double newHeight = this.Height + (e.GetPosition(this).Y - positionYLeftBottomResize);
-                double newLeft = this.Left + (e.GetPosition(this).X - positionXLeftBottomResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    this.Left = newLeft;
-                }
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    positionYLeftBottomResize = e.GetPosition(this).Y;
-                }
-            }
-        }
-
-        private void RightTopResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isRightTopResize && !Maximized)
-            {
-                double newWidth = this.Width + (e.GetPosition(this).X - positionXRightTopResize);
-                double newHeight = this.Height - (e.GetPosition(this).Y - positionYRightTopResize);
-                double newTop = this.Top + (e.GetPosition(this).Y - positionYRightTopResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    positionXRightTopResize = e.GetPosition(this).X;
-                }
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    this.Top = newTop;
-                }
-            }
-        }
-
-        private void LeftResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isLeftResize && !Maximized)
-            {
-                double newWidth = this.Width - (e.GetPosition(this).X - positionLeftResize);
-                double newLeft = this.Left + (e.GetPosition(this).X - positionLeftResize);
-                if (newWidth > minWidth + 40)
-                {
-                    this.Width = newWidth;
-                    this.Left = newLeft;
-                }
-            }
-        }
-
-        private void BottomResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isBottomResize && !Maximized)
-            {
-                double newHeight = this.Height + (e.GetPosition(this).Y - positionBottomResize);
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    positionBottomResize = e.GetPosition(this).Y;
-                }
-            }
-        }
-
-        private void TopResize_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isTopResize && !Maximized)
-            {
-                double newHeight = this.Height - (e.GetPosition(this).Y - positionTopResize);
-                double newTop = this.Top + (e.GetPosition(this).Y - positionTopResize);
-                if (newHeight > minHight + 40)
-                {
-                    this.Height = newHeight;
-                    this.Top = newTop;
-                }
-            }
-        }
-
-        private void Resize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Rectangle rect = (Rectangle)sender;
-            rect.CaptureMouse();
-            switch (rect.Name)
-            {
-                case "rightResize":
-                    isRightResize = true;
-                    positionRightResize = e.GetPosition(this).X;
-                    break;
-                case "leftResize":
-                    isLeftResize = true;
-                    positionLeftResize = e.GetPosition(this).X;
-                    break;
-                case "bottomResize":
-                    isBottomResize = true;
-                    positionBottomResize = e.GetPosition(this).Y;
-                    break;
-                case "topResize":
-                    isTopResize = true;
-                    positionTopResize = e.GetPosition(this).Y;
-                    break;
-                case "rightBottomResize":
-                    isRightBottomResize = true;
-                    positionXRightBottomResize = e.GetPosition(this).X;
-                    positionYRightBottomResize = e.GetPosition(this).Y;
-                    break;
-                case "leftTopResize":
-                    isLeftTopResize = true;
-                    positionXLeftTopResize = e.GetPosition(this).X;
-                    positionYLeftTopResize = e.GetPosition(this).Y;
-                    break;
-                case "rightTopResize":
-                    isRightTopResize = true;
-                    positionXRightTopResize = e.GetPosition(this).X;
-                    positionYRightTopResize = e.GetPosition(this).Y;
-                    break;
-                case "leftBottomResize":
-                    isLeftBottomResize = true;
-                    positionXLeftBottomResize = e.GetPosition(this).X;
-                    positionYLeftBottomResize = e.GetPosition(this).Y;
-                    break;
-            }
-        }
-
-        private void Resize_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Rectangle rect = (Rectangle)sender;
-            rect.ReleaseMouseCapture();
-            switch (rect.Name)
-            {
-                case "rightResize":
-                    isRightResize = false;
-                    break;
-                case "leftResize":
-                    isLeftResize = false;
-                    break;
-                case "bottomResize":
-                    isBottomResize = false;
-                    break;
-                case "topResize":
-                    isTopResize = false;
-                    break;
-                case "rightBottomResize":
-                    isRightBottomResize = false;
-                    break;
-                case "leftTopResize":
-                    isLeftTopResize = false;
-                    break;
-                case "rightTopResize":
-                    isRightTopResize = false;
-                    break;
-                case "leftBottomResize":
-                    isLeftBottomResize = false;
-                    break;
-            }
-        }
-        #endregion
-
         #region Реализация активации и деактивации окна
         private void Window_Activated(object sender, EventArgs e)
         {
@@ -414,6 +180,9 @@ namespace Forwarder.AdditionalWindows
             background.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
             mainTitle.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFB0B0B0"));
         }
+
         #endregion
+  
+            
     }
 }

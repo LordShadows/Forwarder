@@ -1151,5 +1151,11 @@ namespace Forwarder
             AdditionalWindows.Request request = new AdditionalWindows.Request(COMPANIES, SELECTREQUEST, ENGINEERS.Find(x => x.ID == SELECTREQUEST.IDEngineer).Name, ENGINEERS.Find(x => x.ID == SELECTREQUEST.IDEngineer).ContactNumber);
             request.Show();
         }
+
+        private void BCompanyMap_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Map map = new AdditionalWindows.Map(SELECTCOMPANY.Address);
+            map.Show();
+        }
     }
 }

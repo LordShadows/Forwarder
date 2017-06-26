@@ -172,5 +172,14 @@ namespace Forwarder.AdditionalWindows
         {
             this.Close();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(tbCompanyAddress.Text != "")
+            {
+                Map map = new Map(tbCompanyAddress.Text);
+                map.Show();
+            }
+        }
     }
 }

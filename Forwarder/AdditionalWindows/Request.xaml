@@ -1,0 +1,84 @@
+﻿<Window x:Class="Forwarder.AdditionalWindows.Request"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Forwarder.AdditionalWindows"
+        mc:Ignorable="d"
+        Title="Заявка - Forwarder Tools 1.0" Height="523" Width="791" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#00000000" FontFamily="/Forwarder;component/Resources/#Helvetica CE" AllowsTransparency="True" WindowStyle="None" Activated="Window_Activated" Deactivated="Window_Deactivated">
+    <Grid x:Name="body" Margin="20" SnapsToDevicePixels="True">
+        <Rectangle x:Name="background" Fill="#FFF9F9F9" Margin="0" Stroke="#FF3C3C3C" RadiusX="5" RadiusY="5">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="#7F000000" BlurRadius="14" ShadowDepth="0" Direction="313" Opacity="0.75"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle Fill="#FF454545" Height="24" Margin="0" RadiusY="5" RadiusX="5" Stroke="#FF454545" VerticalAlignment="Top"/>
+        <Border x:Name="header" BorderThickness="1" Height="24" Margin="0" VerticalAlignment="Top" CornerRadius="5,5,0,0" MouseLeftButtonDown="Header_MouseDown" BorderBrush="#FF3C3C3C">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStopCollection>
+                            <GradientStop Color="#FF454545" Offset="0.0" />
+                            <GradientStop Color="#FF404040" Offset="1.0" />
+                        </GradientStopCollection>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Border x:Name="headerButton" BorderThickness="1" Margin="0,1,6,-1" HorizontalAlignment="Right" Width="75" MouseEnter="HeaderButton_MouseEnter" MouseLeave="HeaderButton_MouseLeave" Background="#00000000">
+                    <Grid Margin="0">
+                        <Rectangle x:Name="max" HorizontalAlignment="Left" Width="16" Margin="5,1,0,0" Height="16" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="/Forwarder;component/Resources/nofocus.png" Stretch="Uniform"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle x:Name="min" HorizontalAlignment="Left" Width="16" Margin="29,1,0,0" Height="16" VerticalAlignment="Top" Cursor="Hand" MouseDown="Min_MouseDown">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="/Forwarder;component/Resources/min-normal.png" Stretch="Uniform"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle x:Name="close" HorizontalAlignment="Left" Width="16" Margin="53,1,0,0" Height="16" VerticalAlignment="Top" MouseDown="Close_MouseDown" Cursor="Hand">
+                            <Rectangle.Fill>
+                                <ImageBrush Stretch="Uniform" ImageSource="/Forwarder;component/Resources/close-normal.png"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </Border>
+                <Label x:Name="mainTitle" Content="Заявка" Margin="75,-2,75,-1" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="26" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#CCFFFFFF" FontSize="13"/>
+            </Grid>
+        </Border>
+        <Label Content="Номер заявки*:" Margin="0,64,545,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="95"/>
+        <Label Content="Наименование товара*:" HorizontalAlignment="Right" Margin="0,98,498,0" VerticalAlignment="Top"/>
+        <Label Content="Вес*:" HorizontalAlignment="Right" Margin="0,132,603,0" VerticalAlignment="Top"/>
+        <Label Content="Размеры*:" HorizontalAlignment="Right" Margin="0,132,381,0" VerticalAlignment="Top"/>
+        <Label Content="Количество*:" HorizontalAlignment="Right" Margin="0,132,145,0" VerticalAlignment="Top"/>
+        <Label Content="Фирма-поставщик*:" HorizontalAlignment="Left" Margin="111,166,0,0" VerticalAlignment="Top"/>
+        <Label Content="Адрес фирмы:" HorizontalAlignment="Left" Margin="111,200,0,0" VerticalAlignment="Top"/>
+        <Label Content="Контактное лицо:" Margin="111,234,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107"/>
+        <Label Content="Телефон:" HorizontalAlignment="Right" Margin="0,234,189,0" VerticalAlignment="Top"/>
+        <Label Content="Инженер:" Margin="111,268,571,0" VerticalAlignment="Top"/>
+        <Label Content="Телефон инженера:" HorizontalAlignment="Right" Margin="0,268,189,0" VerticalAlignment="Top"/>
+        <Label Content="Примечание:" HorizontalAlignment="Left" Margin="111,302,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дата подачи заявки:" Margin="111,440,517,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbNumber" Style="{StaticResource TextBoxStyle}" Height="28" HorizontalAlignment="Right" Margin="0,63,294,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="246"/>
+        <TextBox x:Name="tbProductName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,97,20,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="473"/>
+        <TextBox x:Name="tbWeight" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,131,478,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="tbDimensions" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,131,256,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="tbQuantity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,131,20,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120"/>
+        <ComboBox x:Name="cbCompany" Margin="0,168,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="493" SelectionChanged="CBCompany_SelectionChanged"/>
+        <TextBox x:Name="tbCompanyAddress" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,199,174,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="372" IsReadOnly="True" UndoLimit="1000"/>
+        <TextBox x:Name="tbCompanyContactName" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,233,271,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="257" IsReadOnly="True"/>
+        <TextBox x:Name="tbCompanyContactPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,233,20,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="164" IsReadOnly="True"/>
+        <TextBox x:Name="tbEngineerName" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,267,333,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="238" IsReadOnly="True"/>
+        <TextBox x:Name="tbEngineerPhone" HorizontalAlignment="Right" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,267,19,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="165" IsReadOnly="True"/>
+        <TextBox x:Name="tbNote" Style="{StaticResource TextBoxStyle}" Height="88" Margin="112,326,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Top"/>
+        <DatePicker x:Name="dpDate" HorizontalAlignment="Right" Margin="0,441,378,0" VerticalAlignment="Top" Width="130" BorderBrush="#FFB0B0B0"/>
+        <Button x:Name="bAdd" Content="Подать заявку" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,442,23,0" VerticalAlignment="Top" Width="122" Height="22" Cursor="Hand" Click="BAdd_Click"/>
+        <Button x:Name="bOK" Content="OK" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,442,23,0" VerticalAlignment="Top" Width="80" Height="22" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BOK_Click"/>
+        <Label x:Name="lErrorMessage" Content="" Margin="111,412,436,0" VerticalAlignment="Top" Foreground="Red"/>
+        <Button Content="Показать на карте" Style="{StaticResource ButtonStyle}" Margin="0,202,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" Height="22" Cursor="Hand"/>
+        <Image HorizontalAlignment="Left" Height="80" Margin="19,29,0,0" VerticalAlignment="Top" Width="80" Source="/Forwarder;component/Resources/box-full.png"/>
+        <Label Content="Для того, чтобы добавить заявку, необходимо заполнить все поля, отмеченные *, и нажать кнопку  &quot;Подать заявку &quot;." HorizontalAlignment="Left" Margin="111,35,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <Button x:Name="bCancel" Content="Отмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,442,164,0" VerticalAlignment="Top" Width="80" Height="22" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Click="BCancel_Click"/>
+    </Grid>
+</Window>

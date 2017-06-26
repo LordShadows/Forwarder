@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Threading;
 
 namespace Forwarder
 {
@@ -13,27 +14,42 @@ namespace Forwarder
     /// </summary>
     public partial class App : Application
     {
-        App()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            InitializeComponent();
-        }
+            base.OnStartup(e);
 
-        [STAThread]
-        static void Main()
-        {
-            App app = new App();
+            AdditionalWindows.Splash splash = new AdditionalWindows.Splash();
+            this.MainWindow = splash;
+            Dialogs.Dialog.WINDOW = splash;
+            splash.Show();
 
+            MainWindow mainWindow = new MainWindow();
             AdditionalWindows.Authorization authorization = new AdditionalWindows.Authorization();
-            Dialogs.Dialog.WINDOW = authorization;
 
-            if (!Sources.Client.InitClient()) return;
+            Task.Factory.StartNew(() =>
+            {
+                //Thread.Sleep(900);
 
-            authorization.ShowDialog();
-            //if (!authorization.isAuthorization) return;
+                if(!Sources.Client.InitClient())return;
+                
+                //Thread.Sleep(3000);
 
-            //MainWindow window = new MainWindow();
-            //Dialogs.Dialog.WINDOW = window;
-            //app.Run(window);
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.MainWindow = mainWindow;
+                    Dialogs.Dialog.WINDOW = mainWindow;
+                    splash.Close();
+                    Task.Factory.StartNew(() => 
+                    {
+                        Thread.Sleep(300);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            authorization.ShowDialog();
+                            mainWindow.Show();
+                        });
+                    });
+                });
+            });
         }
     }
 }

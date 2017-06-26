@@ -1,12 +1,183 @@
-﻿<Window x:Class="Forwarder.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Forwarder"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Forwarder.MainWindow"
         mc:Ignorable="d"
-        Title="Forwarder Tool 1.0" Height="600" Width="1000" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" StateChanged="Window_StateChanged" WindowStartupLocation="CenterScreen" Foreground="#FF232323" Activated="Window_Activated" Deactivated="Window_Deactivated" FontFamily="/Forwarder;component/Resources/#Helvetica CE">
-    <Grid x:Name="body" Margin="20">
+        Title="Forwarder Tool 1.0" Height="600" Width="1100" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" StateChanged="Window_StateChanged" WindowStartupLocation="CenterScreen" Foreground="#FF232323" Activated="Window_Activated" Deactivated="Window_Deactivated" FontFamily="/Forwarder;component/Resources/#Helvetica CE">
+    <Window.Resources>
+        <Style x:Key="GridViewScrollViewerStyleKey" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <DockPanel Margin="{TemplateBinding Padding}">
+                                <ScrollViewer DockPanel.Dock="Top"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    VerticalScrollBarVisibility="Hidden"
+                                    Focusable="false">
+                                    <GridViewHeaderRowPresenter Margin="2,0,2,0"
+                                          Columns="{Binding TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderContainerStyle="{Binding TemplatedParent.View.ColumnHeaderContainerStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderTemplate="{Binding TemplatedParent.View.ColumnHeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderTemplateSelector="{Binding TemplatedParent.View.ColumnHeaderTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
+                                          AllowsColumnReorder="{Binding TemplatedParent.View.AllowsColumnReorder, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderContextMenu="{Binding TemplatedParent.View.ColumnHeaderContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ColumnHeaderToolTip="{Binding TemplatedParent.View.ColumnHeaderToolTip, RelativeSource={RelativeSource TemplatedParent}}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </ScrollViewer>
+
+                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
+                                    KeyboardNavigation.DirectionalNavigation="Local"
+                                    CanContentScroll="True"
+                                    CanHorizontallyScroll="False"
+                                    CanVerticallyScroll="False" />
+                            </DockPanel>
+                            <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                 Orientation="Horizontal"
+                                 Grid.Row="1"
+                                 Maximum="{TemplateBinding ScrollableWidth}"
+                                 ViewportSize="{TemplateBinding ViewportWidth}"
+                                 Value="{TemplateBinding HorizontalOffset}"
+                                 Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                 Grid.Column="1"
+                                 Maximum="{TemplateBinding ScrollableHeight}"
+                                 ViewportSize="{TemplateBinding ViewportHeight}"
+                                 Value="{TemplateBinding VerticalOffset}"
+                                 Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Width ="3" MaxWidth="3"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GridViewColumnHeaderGripper" TargetType="{x:Type Thumb}">
+            <Setter Property="Width" Value="4" />
+            <Setter Property="Background" Value="#00000000" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Padding="{TemplateBinding Padding}" BorderThickness="0,0,0,1" BorderBrush="#B0B0B0" Background="#00000000">
+                            <Rectangle HorizontalAlignment="Left" Width="1" Fill="{TemplateBinding Background}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="{x:Type GridViewColumnHeader}" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#232323"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                        <Grid>
+                            <Border x:Name="HeaderBorder" BorderThickness="0,0,1,1" Height="20" BorderBrush="#B0B0B0" Background="#F0F0F0" Padding="10,0,0,0">
+                                <ContentPresenter x:Name="HeaderContent"
+                                    Margin="0"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                    TextBlock.FontSize="12"/>
+                            </Border>
+                            <Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Margin="0,0,-2,0" Style="{StaticResource GridViewColumnHeaderGripper}" />
+                        </Grid>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Role" Value="Floating">
+                    <Setter Property="Opacity" Value="0.7"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                <Canvas x:Name="PART_FloatingHeaderCanvas">
+                                    <Rectangle Fill="#60000000"
+                                               Width="{TemplateBinding ActualWidth}"
+                                               Height="{TemplateBinding ActualHeight}"/>
+                                </Canvas>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <Style x:Key="ListViewStyle" TargetType="{x:Type ListView}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListView}">
+                        <Border x:Name="Border" BorderThickness="1" Background="#FFFFFF" BorderBrush="#B0B0B0">
+                            <ScrollViewer Style="{StaticResource GridViewScrollViewerStyleKey}">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="{x:Type ListViewItem}" TargetType="{x:Type ListViewItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Border" Padding="2" SnapsToDevicePixels="true" Background="Transparent">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Unselected" />
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="#b4d8fa" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="body" Margin="20" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display">
         <Rectangle x:Name="leftResize" Fill="#00000000" Margin="-5,0" StrokeThickness="0" Cursor="SizeWE" MouseMove="LeftResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" HorizontalAlignment="Left" Width="5"/>
         <Rectangle x:Name="topResize" Fill="#00000000" Margin="0,-5" StrokeThickness="0" Cursor="SizeNS" MouseMove="TopResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Height="5" VerticalAlignment="Top"/>
         <Rectangle x:Name="bottomResize" Fill="#00000000" Margin="0,0,0,-5" StrokeThickness="0" Cursor="SizeNS" MouseMove="BottomResize_MouseMove" MouseLeftButtonDown="Resize_MouseLeftButtonDown" MouseLeftButtonUp="Resize_MouseLeftButtonUp" Height="5" VerticalAlignment="Bottom"/>
@@ -52,18 +223,36 @@
                         </Rectangle>
                     </Grid>
                 </Border>
-                <Label x:Name="mainTitle" Content="FORWARDER Tools 1.0 by Daniel Sandrutski" Margin="75,-1,75,-2" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="11" Foreground="#99FFFFFF"/>
+                <Label x:Name="mainTitle" Content="Forwarder Tools 1.0" Margin="75,-2,75,-1" VerticalAlignment="Top" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Height="26" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#CCFFFFFF" FontSize="13"/>
             </Grid>
         </Border>
-        <Grid x:Name="Content" Margin="1,24,1,1">
+        <Grid x:Name="Content" Margin="1,24,1,1" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="65"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Border BorderBrush="#FFE8E8E8" BorderThickness="0,0,1,0" Margin="0" Background="#FFF0F0F0" CornerRadius="0,0,0,5">
-                <Grid>
+                <Grid SnapsToDevicePixels="True">
                     <StackPanel Margin="0,0,0,164">
-                        <Grid x:Name="mainPage" Height="50" Background="#FFC8C8C8" MouseLeftButtonDown="mainPage_MouseLeftButtonDown">
+                        <Grid x:Name="requestsPage" Height="50" ToolTip="Заявки" MouseLeftButtonDown="RequstsPage_MouseLeftButtonDown">
+                            <Image Source="Resources/request-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="routesPage" Height="50" ToolTip="Маршруты" MouseLeftButtonDown="RoutesPage_MouseLeftButtonDown">
+                            <Image Source="Resources/rout-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="companiesPage" Height="50" ToolTip="Фирмы-поставщики" MouseLeftButtonDown="CompaniesPage_MouseLeftButtonDown">
+                            <Image Source="Resources/company-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="forwardersPage" Height="50" ToolTip="Экспедиторы" MouseLeftButtonDown="ForwardersPage_MouseLeftButtonDown">
+                            <Image Source="Resources/forwarder-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="engineersPage" Height="50" ToolTip="Инженера" MouseLeftButtonDown="EngineersPage_MouseLeftButtonDown">
+                            <Image Source="Resources/engineer-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="usersPage" Height="50" ToolTip="Пользователи" MouseLeftButtonDown="UsersPage_MouseLeftButtonDown">
+                            <Image Source="Resources/users-icon.png" Margin="0" Cursor="Hand" Height="40"/>
+                        </Grid>
+                        <Grid x:Name="serverPage" Height="50" ToolTip="Сервер" MouseLeftButtonDown="ServerPage_MouseLeftButtonDown">
                             <Image Source="Resources/server-icon.png" Margin="0" Cursor="Hand" Height="40"/>
                         </Grid>
                     </StackPanel>
@@ -80,19 +269,235 @@
                     </StackPanel>
                 </Grid>
             </Border>
-
             <TabControl x:Name="tcPages" Margin="0,0,5,5" TabStripPlacement="Right" Background="#FFF9F9F9" BorderBrush="{x:Null}" Grid.Column="1" SelectionChanged="TCPages_SelectionChanged" SelectedIndex="0">
-                <TabItem Header="MainPage" Height="0" Width="0">
+                <TabItem x:Name="RequestsPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="187"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="22" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
+                        <ListView x:Name="lvRequests" Style="{StaticResource ListViewStyle}" Margin="15,47,10,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVRequests_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Номер заявки" Width="100" DisplayMemberBinding="{Binding Number}" />
+                                    <GridViewColumn Header="Наименование товара" Width="250" DisplayMemberBinding="{Binding ProductName}" />
+                                    <GridViewColumn Header="Вес, кг." Width="80" DisplayMemberBinding="{Binding ProductWeight}" />
+                                    <GridViewColumn Header="Размеры, м." Width="100" DisplayMemberBinding="{Binding ProductDimensions}" />
+                                    <GridViewColumn Header="Количество, ед." Width="110" DisplayMemberBinding="{Binding Quantity}" />
+                                    <GridViewColumn Header="Фирма-поставщик" Width="190" DisplayMemberBinding="{Binding Company}" />
+                                    <GridViewColumn Header="Статус" Width="145" DisplayMemberBinding="{Binding Status}" />
+                                    <GridViewColumn Header="ID" Width="0" DisplayMemberBinding="{Binding ID}" />
+                                </GridView>
+                            </ListView.View>
+                            <Button/>
+                        </ListView>
+                        <TextBox x:Name="tbRequestSearch" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TBRequestSearch_TextChanged"/>
+                        <GroupBox Header="Коррекция данных записи" Margin="15,10,10,10" Grid.Row="1">
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="630*"/>
+                                    <ColumnDefinition Width="311*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Номер заявки*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbRequestNumber" Style="{StaticResource TextBoxStyle}" Height="28" Margin="111,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+                                <Label Content="Наименование товара*:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
+                                <TextBox x:Name="tbRequestProductName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="159,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+                                <Label Content="Фирма поставщик*:" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
+                                <TextBox x:Name="tbRequestCompany" Style="{StaticResource TextBoxStyle}" Height="28" Margin="132,75,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
+                                <Label Content="Вес*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="46"/>
+                                <TextBox x:Name="tbRequestWeight" Style="{StaticResource TextBoxStyle}" Height="28" Margin="50,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <Label Content="Размеры*:" HorizontalAlignment="Left" Margin="4,43,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="72"/>
+                                <TextBox x:Name="tbRequestDimensions" Style="{StaticResource TextBoxStyle}" Height="28" Margin="81,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <Label Content="Количество*:" HorizontalAlignment="Left" Margin="6,76,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="89"/>
+                                <TextBox x:Name="tbRequestQuantity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="95,75,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="bRequestAdd" Content="Добавить заявку" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Height="22" Cursor="Hand" Click="BRequestAdd_Click"/>
+                        <Button x:Name="bRequestDelete" Content="Удалить заявку" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Height="22" Cursor="Hand"/>
+                        <Button x:Name="bRequestSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
+                        <Button x:Name="bRequestDistribute" Content="Распределить заявку" Style="{StaticResource ButtonStyle}" Margin="0,141,346,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Right" Width="157" Cursor="Hand" Height="22" VerticalAlignment="Top"/>
+                        <Button x:Name="bRequestOpen" Content="Открыть полную информацию" Style="{StaticResource ButtonStyle}" Margin="211,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Left" Width="215" Cursor="Hand" Height="22" VerticalAlignment="Top" Click="BRequestOpen_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="RoutesPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Label Content="Маршруты" HorizontalAlignment="Left" Margin="21,20,0,0" VerticalAlignment="Top"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="CompaniesPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="187"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="22" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
+                        <ListView x:Name="lvCompanies" Style="{StaticResource ListViewStyle}" Margin="15,47,10,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVCompanies_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Наименование фирмы" Width="250" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Страна" Width="150" DisplayMemberBinding="{Binding Country}" />
+                                    <GridViewColumn Header="Город" Width="150" DisplayMemberBinding="{Binding City}" />
+                                    <GridViewColumn Header="Контактное лицо" Width="200" DisplayMemberBinding="{Binding NameСontactPerson}" />
+                                    <GridViewColumn Header="Контактный телефон" Width="150" DisplayMemberBinding="{Binding PhoneContactPerson}" />
+                                    <GridViewColumn Header="ID" Width="0" DisplayMemberBinding="{Binding ID}" />
+                                </GridView>
+                            </ListView.View>
+                            <Button/>
+                        </ListView>
+                        <TextBox x:Name="tbCompanySearch" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TBCompanySearch_TextChanged"/>
+                        <GroupBox Header="Коррекция данных записи" Margin="15,10,10,10" Grid.Row="1">
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="679*"/>
+                                    <ColumnDefinition Width="262*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Наименование фирмы*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
+                                <TextBox x:Name="tbCompanyName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="162,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <Label Content="Адрес*:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="56"/>
+                                <TextBox x:Name="tbCompanyAddress" Style="{StaticResource TextBoxStyle}" Height="28" Margin="69,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <Label Content="Контактное лицо*:" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
+                                <TextBox x:Name="tbCompanyContactName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="132,75,191,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <Label Content="Страна*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="62"/>
+                                <TextBox x:Name="tbCompanyCountry" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <Label Content="Город*:" HorizontalAlignment="Left" Margin="4,43,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="72"/>
+                                <TextBox x:Name="tbCompanyCity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <Label Content="Телефон контактного лица*:" Margin="0,76,0,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Right" Width="176"/>
+                                <TextBox x:Name="tbCompanyContactPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="1,75,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="bCompanyAdd" Content="Добавить фирму" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" Height="22"/>
+                        <Button x:Name="bCompanyDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" Height="22"/>
+                        <Button x:Name="bCompanySaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
+                        <Button x:Name="bCompanyMap" Content="Показать расположение на карте" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,346,0" Width="227" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="ForwardersPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="154"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="22" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
+                        <ListView x:Name="lvForwarders" Style="{StaticResource ListViewStyle}" Margin="15,47,10,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVForwarders_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Ф.И.О. экспедитора" Width="250" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Контактный телефон" Width="200" DisplayMemberBinding="{Binding СontactNumber}" />
+                                    <GridViewColumn Header="ID" Width="300" DisplayMemberBinding="{Binding ID}" />
+                                </GridView>
+                            </ListView.View>
+                            <Button/>
+                        </ListView>
+                        <TextBox x:Name="tbForwarderSearch" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TBForwarderSearch_TextChanged"/>
+                        <GroupBox Header="Коррекция данных записи" Margin="15,10,10,10" Grid.Row="1">
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="518*"/>
+                                    <ColumnDefinition Width="425*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Ф.И.О. экспедитора*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbForwarderName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <Label Content="Примечание:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbForwarderNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                                <Label Content="Контактный телефон экспедитора*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="208"/>
+                                <TextBox x:Name="tbForwarderPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="212,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="bForwarderAdd" Content="Добавить экспедитора" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bForwarderDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bForwarderSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
+                        <Button x:Name="bForwarderCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="EngineersPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="154"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="22" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
+                        <ListView x:Name="lvEngineers" Style="{StaticResource ListViewStyle}" Margin="15,47,10,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVEngineers_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Ф.И.О. инженера" Width="250" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Контактный телефон" Width="200" DisplayMemberBinding="{Binding СontactNumber}" />
+                                    <GridViewColumn Header="ID" Width="300" DisplayMemberBinding="{Binding ID}" />
+                                </GridView>
+                            </ListView.View>
+                            <Button/>
+                        </ListView>
+                        <TextBox x:Name="tbEngineerSearch" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TBEngineerSearch_TextChanged"/>
+                        <GroupBox Header="Коррекция данных записи" Margin="15,10,10,10" Grid.Row="1">
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="536*"/>
+                                    <ColumnDefinition Width="407*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Ф.И.О. инженера*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbEngineerName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <Label Content="Примечание:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbEngineerNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                                <Label Content="Контактный телефон инженера*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="194"/>
+                                <TextBox x:Name="tbEngineerPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="198,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="bEngineerAdd" Content="Добавить инженера" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bEngineerDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bEngineerSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
+                        <Button x:Name="bEngineerCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="UsersPage" Height="0" Width="0">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="154"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="22" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
+                        <ListView x:Name="lvUsers" Style="{StaticResource ListViewStyle}" Margin="15,47,10,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVUsers_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Логин" Width="170" DisplayMemberBinding="{Binding Login}" />
+                                    <GridViewColumn Header="Ф.И.О. пользователя" Width="250" DisplayMemberBinding="{Binding Name}" />
+                                    <GridViewColumn Header="Роль" Width="170" DisplayMemberBinding="{Binding Role}" />
+                                    <GridViewColumn Header="Ссылка" Width="300" DisplayMemberBinding="{Binding Snapping}" />
+                                </GridView>
+                            </ListView.View>
+                            <Button/>
+                        </ListView>
+                        <TextBox x:Name="tbUserSearch" Style="{StaticResource TextBoxStyle}" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TextBox_TextChanged" Background="{x:Null}"/>
+                        <Label Content="Поиск:" HorizontalAlignment="Right" Width="53" Height="26" VerticalAlignment="Top" Margin="0,11,425,0" Visibility="Hidden"/>
+                        <GroupBox Header="Коррекция данных записи" Margin="15,10,10,10" Grid.Row="1">
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="445*"/>
+                                    <ColumnDefinition Width="498*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Логин пользователя*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbUserLogin" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White"/>
+                                <Label Content="Ф.И.О. пользователя*:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
+                                <TextBox x:Name="tbUserName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White"/>
+                                <Label Content="Роль*:" HorizontalAlignment="Right" Margin="0,10,197,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="44"/>
+                                <ComboBox x:Name="cbUserRole" Margin="0,12,15,0" VerticalAlignment="Top" Grid.Column="1" Height="21" HorizontalAlignment="Right" Width="177"/>
+                                <Label Content="ID ссылки:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="68"/>
+                                <TextBox x:Name="tbUserSnapping" Style="{StaticResource TextBoxStyle}" Height="28" Margin="77,9,247,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5" BorderBrush="White"/>
+                                <Label Content="Инф. по ссылке:" HorizontalAlignment="Left" Margin="4,44,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="103"/>
+                                <ComboBox x:Name="cbUserSnappingInfo" Grid.Column="1" Margin="112,46,15,0" VerticalAlignment="Top" Height="21"/>
+                            </Grid>
+                        </GroupBox>
+                        <Button x:Name="bUserAdd" Content="Добавить пользователя" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bUserDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bUserSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" Cursor="Hand" IsEnabled="False"/>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="ServerPage" Height="0" Width="0">
                     <Grid>
-                        <Label Content="Введите сообщение:" HorizontalAlignment="Left" Margin="34,23,0,0" VerticalAlignment="Top" Height="28" VerticalContentAlignment="Center" Width="132" Grid.Column="1"/>
-                        <Button Style ="{StaticResource ButtonStyle}" Content="Отправить сообщение" HorizontalAlignment="Right" Margin="0,26,20,0" VerticalAlignment="Top" Width="182" HorizontalContentAlignment="Center" Click="Button_Click" Cursor="Hand" Grid.Column="1"/>
-                        <TextBox x:Name="tfTextMessage" Style="{StaticResource TextBoxStyle}" Height="28" Margin="171,23,207,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF232323" VerticalContentAlignment="Center" Grid.Column="1"/>
-                        <ListBox x:Name="lbMessages" Margin="34,56,20,20" Grid.Column="1"/>
+                        <Label Content="Серверная" HorizontalAlignment="Left" Margin="21,20,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </TabItem>
             </TabControl>
-
-            
+            <Image Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" VerticalAlignment="Top" Width="238" Source="Resources/logo.png"/>
         </Grid>
     </Grid>
 </Window>

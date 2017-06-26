@@ -24,10 +24,15 @@ namespace Forwarder.AdditionalWindows
         private String errorLogin = "Поле логин не заполнено. ";
         private String errorPassword = "Поле пароль не заполнено.";
 
+        public bool isWaiting = false;
+
         public Authorization()
         {
             InitializeComponent();
             Sources.Functions.AUTHORIZATION = this;
+
+            this.tbLogin.Text = "Fox";
+            this.tbPassword.Password = "12345";
         }
 
         #region Реализация перемещения окна
@@ -80,7 +85,7 @@ namespace Forwarder.AdditionalWindows
 
         private void TBPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            Regex regex = new Regex(@"^[A-Za-z][A-Za-z0-9_-]{4,}$");
+            Regex regex = new Regex(@"^[A-Za-z0-9_-]{4,}$");
             if (tbPassword.Password == "")
             {
                 errorPassword = "Поле пароль не заполнено.";
@@ -114,8 +119,37 @@ namespace Forwarder.AdditionalWindows
 
         private void BGo_Click(object sender, RoutedEventArgs e)
         {
-            //Sources.Client.SendMessage("Message", new String[] { tbLogin.Text, tbPassword.Password });
-            Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+            if (!isWaiting)
+            {
+                isWaiting = true;
+                bGo.IsEnabled = true;
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+            }
+        }
+
+        private void TBLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter && !isWaiting)
+            {
+                isWaiting = true;
+                bGo.IsEnabled = true;
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+            }
+        }
+
+        private void TBPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !isWaiting)
+            {
+                isWaiting = true;
+                bGo.IsEnabled = true;
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+            }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if(!isAuthorization) Sources.Functions.Shutdown();
         }
     }
 }

@@ -30,11 +30,13 @@ namespace Forwarder.Sources
                 LISTENTHREAD.Start();
 
                 cryptography = new Cryptography();
+
                 return true;
             }
             catch
             {
                 Dialogs.Dialog.ShowDialogError("Связь с сервером не установлена. Сервер выключен или недоступен. Попробуйте позже.", "Ошибка соединения");
+                Functions.Shutdown();
                 return false;
             }
         }
@@ -66,11 +68,29 @@ namespace Forwarder.Sources
                     case "AuthenticationAttempt":
                         Functions.AuthenticationAttempt(message.TextArguments[0]);
                         break;
+                    case "UpdateUsersData":
+                        Functions.UpdateUsersData(message.TextArguments[0], message.TextArguments[1]);
+                        break;
+                    case "UpdateEngineersData":
+                        Functions.UpdateEngineersData(message.TextArguments[0]);
+                        break;
+                    case "UpdateForwardersData":
+                        Functions.UpdateForwardersData(message.TextArguments[0]);
+                        break;
+                    case "UpdateCompaniesData":
+                        Functions.UpdateCompaniesData(message.TextArguments[0]);
+                        break;
+                    case "UpdateRequestsData":
+                        Functions.UpdateRequestsData(message.TextArguments[0]);
+                        break;
+                    case "AccountData":
+                        Functions.AccountData(message.TextArguments[0], message.TextArguments[1], message.TextArguments[2]);
+                        break;
                 }   
             }
-            catch (NullReferenceException ignore)
+            catch (NullReferenceException)
             {
-                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено.", "Ошибка соединения");
+                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено!", "Ошибка соединения");
                 Functions.Shutdown();
             }
             catch (Exception exp)
@@ -91,9 +111,9 @@ namespace Forwarder.Sources
                     Send("$Directives$" + "$AESKeys$" + AESKeys);
                 }
             }
-            catch (NullReferenceException ignore)
+            catch (NullReferenceException)
             {
-                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено.", "Ошибка соединения");
+                Dialogs.Dialog.ShowDialogError("Связь с сервером прервана. Приложение будет остановлено!", "Ошибка соединения");
                 Functions.Shutdown();
             }
             catch (Exception exp)
@@ -107,11 +127,29 @@ namespace Forwarder.Sources
         {
             try
             {
+                StringBuilder messageBuffer = new StringBuilder();
                 while (SERVERSOCKET.Connected)
                 {
-                    byte[] buffer = new byte[4096];
-                    int bytesReceive = SERVERSOCKET.Receive(buffer);
-                    String message = Encoding.UTF8.GetString(buffer, 0, bytesReceive);
+                    byte[] buffer = new byte[1024];
+                    int bytesReceive;
+                    String message;
+
+                    do
+                    {
+                        bytesReceive = SERVERSOCKET.Receive(buffer);
+                        String temp = Encoding.UTF8.GetString(buffer, 0, bytesReceive);
+                        if (temp.Contains("$END$"))
+                        {
+                            messageBuffer.Append(temp.Substring(0, temp.IndexOf("$END$")));
+                            message = messageBuffer.ToString();
+                            messageBuffer.Clear();
+                            messageBuffer.Append(temp.Substring(temp.IndexOf("$END$") + 5));
+                            break;
+                        }
+                        messageBuffer.Append(temp);
+                    }
+                    while (true);
+               
                     if (message.Contains("$Directives$"))
                         HandleDirectiveCommand(message);
                     else

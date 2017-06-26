@@ -13,6 +13,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -71,16 +71,49 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="App.xaml">
+    <Page Include="AdditionalWindows\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Request.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Splash.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </ApplicationDefinition>
+    <Compile Include="AdditionalWindows\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AdditionalWindows\Authorization.xaml.cs">
       <DependentUpon>Authorization.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\CreateAccount.xaml.cs">
       <DependentUpon>CreateAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AdditionalWindows\Request.xaml.cs">
+      <DependentUpon>Request.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\Splash.xaml.cs">
+      <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClassResource\Company.cs" />
+    <Compile Include="ClassResource\Engineer.cs" />
+    <Compile Include="ClassResource\Forwarder.cs" />
+    <Compile Include="ClassResource\Request.cs" />
+    <Compile Include="ClassResource\User.cs" />
     <Compile Include="Dialogs\Dialog.cs" />
     <Compile Include="Dialogs\InformationMessageDialog.xaml.cs">
       <DependentUpon>InformationMessageDialog.xaml</DependentUpon>
@@ -157,6 +190,8 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\System San Francisco Display Regular.ttf" />
+    <Resource Include="Resources\HelveticaRegular.ttf" />
     <Resource Include="Resources\Helvetica CE Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +268,45 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\shield-warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\company-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\engineer-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\forwarder-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\request-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\rout-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\users-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\abouticon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\aboutlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mainlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\box-full.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

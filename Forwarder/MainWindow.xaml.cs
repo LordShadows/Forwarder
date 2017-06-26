@@ -97,6 +97,9 @@ namespace Forwarder
                     requestsPage.Visibility = Visibility.Visible;
                     RequestsPage.Visibility = Visibility.Visible;
 
+                    routesPage.Visibility = Visibility.Visible;
+                    RoutesPage.Visibility = Visibility.Visible;
+
                     Sources.Client.SendMessage("UpdateAllData", new String[] { });
                     
                     tcPages.SelectedItem = ForwardersPage;

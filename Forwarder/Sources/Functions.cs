@@ -81,13 +81,32 @@ namespace Forwarder.Sources
             }));
         }
 
-        public static void AccountData(String login, String name, String role)
+        public static void UpdateDestinationsData(String destinations)
+        {
+            List<ClassResource.Destination> tempList = JsonConvert.DeserializeObject<List<ClassResource.Destination>>(destinations);
+            MAINWINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+            {
+                MAINWINDOW.UpdateDestinationsData(tempList);
+            }));
+        }
+
+        public static void UpdateRoutesData(String routes)
+        {
+            List<ClassResource.Route> tempList = JsonConvert.DeserializeObject<List<ClassResource.Route>>(routes);
+            MAINWINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+            {
+                MAINWINDOW.UpdateRoutesData(tempList);
+            }));
+        }
+
+        public static void AccountData(String login, String name, String role, String snapping)
         {
             MAINWINDOW.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
             {
                 MAINWINDOW.USERLOGIN = login;
                 MAINWINDOW.USERNAME = name;
                 MAINWINDOW.USERROLE = role;
+                MAINWINDOW.USERSNAPPING = snapping;
                 MAINWINDOW.InitWindow();
             }));
         }

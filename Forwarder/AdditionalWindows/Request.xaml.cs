@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace Forwarder.AdditionalWindows
 {
@@ -31,10 +32,11 @@ namespace Forwarder.AdditionalWindows
             tbEngineerPhone.Text = phone;
 
             cbCompany.Items.Clear();
-            foreach (ClassResource.Company item in COMPANIES)
-            {
-                cbCompany.Items.Add(item.Name);
-            }
+            if(COMPANIES != null)
+                foreach (ClassResource.Company item in COMPANIES)
+                {
+                    cbCompany.Items.Add(item.Name);
+                }
 
             DateTime thisDay = DateTime.Today;
             dpDate.Text = thisDay.ToString("d");
@@ -46,22 +48,25 @@ namespace Forwarder.AdditionalWindows
         {
             InitializeComponent();
             COMPANIES = companies;
-            this.Title = "Добавление заявки - Forwarder Tools 1.0";
-            mainTitle.Content = "Добавление заявки";
+            this.Title = "Просмотр заявки - Forwarder Tools 1.0";
+            mainTitle.Content = "Просмотр заявки №" + selectRequest.Number;
+            lText.Content = "Изменение каких-либо данных не поддерживается.";
             tbEngineerName.Text = name;
             tbEngineerPhone.Text = phone;
 
             cbCompany.Items.Clear();
-            foreach (ClassResource.Company item in COMPANIES)
-            {
-                cbCompany.Items.Add(item.Name);
-            }
+            if (COMPANIES != null)
+                foreach (ClassResource.Company item in COMPANIES)
+                {
+                    cbCompany.Items.Add(item.Name);
+                }
 
             tbNumber.Text = selectRequest.Number;
             tbProductName.Text = selectRequest.ProductName;
             tbWeight.Text = selectRequest.ProductWeight;
             tbDimensions.Text = selectRequest.ProductDimensions;
             tbQuantity.Text = selectRequest.Quantity;
+            tbNote.Text = selectRequest.Note;
 
             cbCompany.SelectedItem = companies.Find(x => x.ID == selectRequest.IDCompany).Name;
 
@@ -166,6 +171,10 @@ namespace Forwarder.AdditionalWindows
                 lErrorMessage.Content = "Неправильно заполнено поле \"Количество\"";
                 return;
             }
+
+            ClassResource.Request request = new ClassResource.Request(null, tbNumber.Text, tbProductName.Text, tbWeight.Text, tbDimensions.Text, tbQuantity.Text, COMPANIES[cbCompany.SelectedIndex].ID, null, tbNote.Text, null);
+            Sources.Client.SendMessage("AddRequest", new String[] { JsonConvert.SerializeObject(request) });
+            this.Close();
         }
 
         private void BOK_Click(object sender, RoutedEventArgs e)

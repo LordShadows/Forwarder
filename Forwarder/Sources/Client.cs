@@ -83,8 +83,17 @@ namespace Forwarder.Sources
                     case "UpdateRequestsData":
                         Functions.UpdateRequestsData(message.TextArguments[0]);
                         break;
+                    case "UpdateDestinationsData":
+                        Functions.UpdateDestinationsData(message.TextArguments[0]);
+                        break;
+                    case "UpdateRoutesData":
+                        Functions.UpdateRoutesData(message.TextArguments[0]);
+                        break;
                     case "AccountData":
-                        Functions.AccountData(message.TextArguments[0], message.TextArguments[1], message.TextArguments[2]);
+                        Functions.AccountData(message.TextArguments[0], message.TextArguments[1], message.TextArguments[2], message.TextArguments[3]);
+                        break;
+                    case "ShowWarning":
+                        Dialogs.Dialog.ShowWarming(message.TextArguments[0], message.TextArguments[1], message.TextArguments[2]);
                         break;
                 }   
             }

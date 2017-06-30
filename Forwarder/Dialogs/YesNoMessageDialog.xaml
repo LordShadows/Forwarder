@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Forwarder.Dialogs"
         mc:Ignorable="d"
-        Title="Возник вопрос" Height="214.436" Width="450.12" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#00000000" FontFamily="/Forwarder;component/Resources/#Helvetica CE" AllowsTransparency="True" WindowStyle="None" SizeToContent="Height" Activated="Window_Activated" Deactivated="Window_Deactivated">
+        Title="Возник вопрос" Height="214.436" Width="450.12" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="#00000000" FontFamily="/Forwarder;component/Resources/#Helvetica CE" AllowsTransparency="True" WindowStyle="None" Activated="Window_Activated" Deactivated="Window_Deactivated">
     <Grid x:Name="body" Margin="20">
         <Rectangle x:Name="background" Fill="#FFECECEC" Margin="0" Stroke="#FF3C3C3C" RadiusX="5" RadiusY="5">
             <Rectangle.Effect>

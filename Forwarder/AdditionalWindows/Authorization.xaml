@@ -31,10 +31,9 @@
         <Label Content="Пароль:" HorizontalAlignment="Left" Margin="105,133,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="tbPassword" Style="{StaticResource PasswordBoxStyle}" Margin="160,131,0,0" VerticalAlignment="Top" Height="28" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="235" PasswordChanged="TBPassword_PasswordChanged" KeyDown="TBPassword_KeyDown"/>
         <TextBox x:Name="tbLogin" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Height="28" Margin="160,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="235" VerticalContentAlignment="Center" TextChanged="TBLogin_TextChanged" KeyDown="TBLogin_KeyDown"/>
-        <Button x:Name="bAddUser" Content="Создать пользователя" Style ="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="108,186,0,0" Width="158" Cursor="Hand" Height="22" VerticalAlignment="Top" IsEnabled="False"/>
         <Button x:Name="bCancel" Content="Отмена" Style ="{StaticResource ButtonStyle}" Margin="0,186,127,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="90" Cursor="Hand" Click="BCancel_Click"/>
         <Button x:Name="bGo" Content="Войти" Style ="{StaticResource MainButtonStyle}" Margin="0,186,25,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="90" Cursor="Hand" IsDefault="True" IsEnabled="False" Click="BGo_Click"/>
-        <TextBlock HorizontalAlignment="Left" Margin="108,62,0,0" TextWrapping="Wrap" Text="Если у Вас есть логин и пароль, введите их здесь. Если у Вас их нет, нажмите &quot;Создать пользователя&quot;." VerticalAlignment="Top" Width="409" Height="32" FontSize="11"/>
+        <TextBlock HorizontalAlignment="Left" Margin="108,62,0,0" TextWrapping="Wrap" Text="Если у Вас есть логин и пароль, введите их здесь. Если у Вас их нет, обратитесь к Администратору." VerticalAlignment="Top" Width="409" Height="32" FontSize="11"/>
         <Label x:Name="lError" Content="Поле логин не заполнено. Поле пароль не заполнено." HorizontalAlignment="Left" Margin="105,155,0,0" VerticalAlignment="Top" FontSize="11" Foreground="Red"/>
     </Grid>
 </Window>

@@ -81,6 +81,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AdditionalWindows\Company.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Engineer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Forwarder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdditionalWindows\Map.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -107,8 +119,17 @@
     <Compile Include="AdditionalWindows\Authorization.xaml.cs">
       <DependentUpon>Authorization.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AdditionalWindows\Company.xaml.cs">
+      <DependentUpon>Company.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AdditionalWindows\CreateAccount.xaml.cs">
       <DependentUpon>CreateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\Engineer.xaml.cs">
+      <DependentUpon>Engineer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\Forwarder.xaml.cs">
+      <DependentUpon>Forwarder.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\Map.xaml.cs">
       <DependentUpon>Map.xaml</DependentUpon>
@@ -122,10 +143,15 @@
     <Compile Include="AdditionalWindows\Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AdditionalWindows\User.xaml.cs">
+      <DependentUpon>User.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClassResource\Company.cs" />
+    <Compile Include="ClassResource\Destination.cs" />
     <Compile Include="ClassResource\Engineer.cs" />
     <Compile Include="ClassResource\Forwarder.cs" />
     <Compile Include="ClassResource\Request.cs" />
+    <Compile Include="ClassResource\Route.cs" />
     <Compile Include="ClassResource\User.cs" />
     <Compile Include="Dialogs\Dialog.cs" />
     <Compile Include="Dialogs\InformationMessageDialog.xaml.cs">
@@ -143,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AdditionalWindows\CreateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\User.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -320,6 +350,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\box-full.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sticky-note.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -233,7 +233,7 @@
             </Grid.ColumnDefinitions>
             <Border BorderBrush="#FFE8E8E8" BorderThickness="0,0,1,0" Margin="0" Background="#FFF0F0F0" CornerRadius="0,0,0,5">
                 <Grid SnapsToDevicePixels="True">
-                    <StackPanel Margin="0,0,0,164">
+                    <StackPanel Margin="0,0,0,164" x:Name="spMenu">
                         <Grid x:Name="requestsPage" Height="50" ToolTip="Заявки" MouseLeftButtonDown="RequstsPage_MouseLeftButtonDown">
                             <Image Source="Resources/request-icon.png" Margin="0" Cursor="Hand" Height="40"/>
                         </Grid>
@@ -256,11 +256,11 @@
                             <Image Source="Resources/server-icon.png" Margin="0" Cursor="Hand" Height="40"/>
                         </Grid>
                     </StackPanel>
-                    <StackPanel Height="159" VerticalAlignment="Bottom">
+                    <StackPanel Height="105" VerticalAlignment="Bottom">
                         <Grid x:Name="aboutMessageBotton" Height="50" Margin="0" MouseLeftButtonDown="AboutMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="AboutMessageBotton_MouseLeftButtonUp" ToolTip="О программе">
                             <Image Margin="0" Cursor="Hand" Height="40" Source="Resources/about-icon.png"/>
                         </Grid>
-                        <Grid x:Name="settingMessageBotton" Height="50" Margin="00" MouseLeftButtonDown="SettingMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="SettingMessageBotton_MouseLeftButtonUp" ToolTip="Настройки">
+                        <Grid x:Name="settingMessageBotton" Height="0" Margin="00" MouseLeftButtonDown="SettingMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="SettingMessageBotton_MouseLeftButtonUp" ToolTip="Настройки">
                             <Image Margin="0" Cursor="Hand" Height="40" Source="Resources/settings-icon.png"/>
                         </Grid>
                         <Grid x:Name="exitMessageBotton" Height="50" Margin="0" MouseLeftButtonDown="ExitMessageBotton_MouseLeftButtonDown" MouseLeftButtonUp="ExitMessageBotton_MouseLeftButtonUp" ToolTip="Завершить работу сервера">
@@ -313,11 +313,11 @@
                                 <TextBox x:Name="tbRequestQuantity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="95,75,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
                             </Grid>
                         </GroupBox>
-                        <Button x:Name="bRequestAdd" Content="Добавить заявку" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Height="22" Cursor="Hand" Click="BRequestAdd_Click"/>
-                        <Button x:Name="bRequestDelete" Content="Удалить заявку" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Height="22" Cursor="Hand"/>
+                        <Button x:Name="bRequestAdd" Content="Добавить заявку" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Height="22" Cursor="Hand" Click="BRequestAdd_Click" IsEnabled="False"/>
+                        <Button x:Name="bRequestDelete" Content="Удалить заявку" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Height="22" Cursor="Hand" IsEnabled="False"/>
                         <Button x:Name="bRequestSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
-                        <Button x:Name="bRequestDistribute" Content="Распределить заявку" Style="{StaticResource ButtonStyle}" Margin="0,141,346,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Right" Width="157" Cursor="Hand" Height="22" VerticalAlignment="Top"/>
-                        <Button x:Name="bRequestOpen" Content="Открыть полную информацию" Style="{StaticResource ButtonStyle}" Margin="211,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Left" Width="215" Cursor="Hand" Height="22" VerticalAlignment="Top" Click="BRequestOpen_Click"/>
+                        <Button x:Name="bRequestDistribute" Content="Распределить заявку" Style="{StaticResource ButtonStyle}" Margin="0,141,346,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Right" Width="157" Cursor="Hand" Height="22" VerticalAlignment="Top" IsEnabled="False"/>
+                        <Button x:Name="bRequestOpen" Content="Открыть полную информацию" Style="{StaticResource ButtonStyle}" Margin="211,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" HorizontalAlignment="Left" Width="215" Cursor="Hand" Height="22" VerticalAlignment="Top" Click="BRequestOpen_Click" IsEnabled="False"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="RoutesPage" Height="0" Width="0">
@@ -331,23 +331,24 @@
                             <ColumnDefinition Width="255"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ListView x:Name="lvRoutes" Style="{StaticResource ListViewStyle}" Margin="15,47,0,10" BorderBrush="#FFB0B0B0" SelectionChanged="LVRequests_SelectionChanged" Grid.RowSpan="3">
+                        <ListView x:Name="lvRoutes" Style="{StaticResource ListViewStyle}" Margin="15,47,0,10" BorderBrush="#FFB0B0B0" SelectionChanged="LVRoutes_SelectionChanged" Grid.RowSpan="3">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Номер" Width="100" DisplayMemberBinding="{Binding Number}" />
-                                    <GridViewColumn Header="Статус" Width="100" DisplayMemberBinding="{Binding ProductName}" />
+                                    <GridViewColumn Header="Статус" Width="100" DisplayMemberBinding="{Binding Status}" />
                                     <GridViewColumn Header="ID" Width="0" DisplayMemberBinding="{Binding ID}" />
                                 </GridView>
                             </ListView.View>
                             <Button/>
                         </ListView>
                         <Line Fill="#FFB0B0B0" Stroke="#FFB0B0B0" Grid.Column="1" Margin="10,47,0,10" Y2="1000" HorizontalAlignment="Left" Width="2" Grid.RowSpan="3"/>
-                        <ListView x:Name="lvDestinations" Style="{StaticResource ListViewStyle}" Margin="24,33,54,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVRequests_SelectionChanged" Grid.Column="1" Grid.Row="1">
+                        <ListView x:Name="lvDestinations" Style="{StaticResource ListViewStyle}" Margin="24,33,54,0" BorderBrush="#FFB0B0B0" SelectionChanged="LVDestinations_SelectionChanged" Grid.Column="1" Grid.Row="1">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="№" Width="40" DisplayMemberBinding="{Binding Number}" />
                                     <GridViewColumn Header="Город/Страна" Width="180" DisplayMemberBinding="{Binding Address}" />
-                                    <GridViewColumn Header="Планируемая дата прибытия" Width="190" DisplayMemberBinding="{Binding ProductName}" />
+                                    <GridViewColumn Header="Номер заявки" Width="110" DisplayMemberBinding="{Binding Request}" />
+                                    <GridViewColumn Header="Планируемая дата прибытия" Width="190" DisplayMemberBinding="{Binding Date}" />
                                     <GridViewColumn Header="ID" Width="0" DisplayMemberBinding="{Binding ID}" />
                                 </GridView>
                             </ListView.View>
@@ -355,42 +356,47 @@
                         </ListView>
                         <Image Width="22" Height="20" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Right" Source="Resources/search.png" Margin="0,14,427,0"/>
                         <TextBox x:Name="tbRoutesSearch" Style="{StaticResource TextBoxStyle}" Grid.Column="1" Height="28" Margin="0,10,7,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="418" TextChanged="TBCompanySearch_TextChanged"/>
-                        <Button Content="" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Right" Margin="0,33,10,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Height="37"/>
-                        <Button Content="" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Right" Margin="0,78,10,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Height="37"/>
+                        <Button x:Name="bDestinationUp" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Right" Margin="0,33,10,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Height="37" Cursor="Hand" Click="BDestinationUp_Click">
+                            <Image Height="20" Width="20" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Resources/up.png" Stretch="Fill"/>
+                        </Button>
+                        <Button x:Name="bDestinationDown" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Right" Margin="0,78,10,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Height="37" Cursor="Hand" Click="BDestinationDown_Click">
+                            <Image Height="20" Width="20" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Resources/down.png" Stretch="Fill"/>
+                        </Button>
                         <Label Content="Пункты назначения:" Grid.Column="1" HorizontalAlignment="Left" Margin="20,5,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Width="122"/>
                         <GroupBox Grid.Column="1" Header="Коррекция данных маршрута" Height="207" Margin="20,38,7,0" VerticalAlignment="Top">
                             <Grid>
                                 <Label Content="Номер маршрута*:" HorizontalAlignment="Left" Margin="9,11,0,0" VerticalAlignment="Top" Height="26" Width="116"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}" Height="28" Margin="135,10,466,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbRouteNumber" Style="{StaticResource TextBoxStyle}" Height="28" Margin="135,10,466,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBRouteNumber_TextChanged"/>
                                 <Label Content="Маршрут:" HorizontalAlignment="Left" Margin="9,44,0,0" VerticalAlignment="Top" Height="26" Width="66"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}" Height="28" Margin="81,43,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbRouteRoute" Style="{StaticResource TextBoxStyle}" Height="28" Margin="81,43,10,0" Text="" VerticalAlignment="Top" IsReadOnly="True" TextChanged="TBRouteRoute_TextChanged"/>
                                 <Label Content="Дата убытия*:" Margin="0,10,362,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="86" Height="26"/>
                                 <Label Content="Дата возвращения*:" HorizontalAlignment="Right" Margin="0,10,122,0" VerticalAlignment="Top" Height="26" Width="120"/>
-                                <DatePicker HorizontalAlignment="Right" Margin="0,11,258,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" Height="24" Width="100"/>
-                                <DatePicker Margin="0,11,13,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" HorizontalAlignment="Right" Width="100" Height="24"/>
+                                <DatePicker x:Name="dpRouteDepartureDate" HorizontalAlignment="Right" Margin="0,11,258,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" Height="24" Width="100" SelectedDateChanged="DPRouteDepartureDate_SelectedDateChanged"/>
+                                <DatePicker x:Name="dpRouteReturnDate" Margin="0,11,13,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" HorizontalAlignment="Right" Width="100" Height="24" SelectedDateChanged="DPRouteReturnDate_SelectedDateChanged"/>
                                 <Label Content="Экспедитор:" HorizontalAlignment="Left" Margin="9,77,0,0" VerticalAlignment="Top" Height="26" Width="77"/>
-                                <ComboBox Margin="103,79,332,0" VerticalAlignment="Top" Height="22"/>
+                                <ComboBox x:Name="cbRouteForwarder" Margin="103,79,332,0" VerticalAlignment="Top" Height="22" SelectionChanged="CBRouteForwarder_SelectionChanged"/>
                                 <Label Content="Тип автомабиля:" Margin="0,77,208,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="103" Height="26"/>
-                                <ComboBox Margin="0,79,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="181" Height="22"/>
+                                <ComboBox x:Name="cbRouteCar" Margin="0,79,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="181" Height="22" SelectionChanged="CBRouteCar_SelectionChanged"/>
                                 <Label Content="Примечание:" HorizontalAlignment="Left" Margin="9,110,0,0" VerticalAlignment="Top" Height="26" Width="84"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}" Height="28" Margin="99,109,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-                                <Button Content="Добавить маршрут" Style="{StaticResource MainButtonStyle}" Margin="0,152,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="145" Height="22"/>
-                                <Button Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,152,178,0" VerticalAlignment="Top" Width="113" Height="22"/>
-                                <Button Content="Сохранить изменения" Style="{StaticResource ButtonStyle}" Margin="12,152,0,0" VerticalAlignment="Top" IsEnabled="False" Height="22" HorizontalAlignment="Left" Width="158"/>
-                                <Button Content="Завершить формирование" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,152,313,0" VerticalAlignment="Top" Width="182" Height="22"/>
+                                <TextBox x:Name="tbRouteNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="99,109,10,0" Text="" VerticalAlignment="Top" TextChanged="TBRouteNote_TextChanged"/>
+                                <Button x:Name="bRouteAdd" Content="Добавить маршрут" Style="{StaticResource MainButtonStyle}" Margin="0,152,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="145" Height="22" IsEnabled="False" Click="BRouteAdd_Click" Cursor="Hand"/>
+                                <Button x:Name="bRouteDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,152,168,0" VerticalAlignment="Top" Width="113" Height="22" IsEnabled="False" Cursor="Hand" Click="BRouteDelete_Click"/>
+                                <Button x:Name="bRouteSaveChange" Content="Сохранить изменения" Style="{StaticResource ButtonStyle}" Margin="12,152,0,0" VerticalAlignment="Top" IsEnabled="False" Height="22" HorizontalAlignment="Left" Width="158" Cursor="Hand" Click="BRouteSaveChange_Click"/>
+                                <Button x:Name="bRouteClose" Content="Закрыть" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,152,291,0" VerticalAlignment="Top" Width="82" Height="22" IsEnabled="False" Cursor="Hand" Click="BRouteClose_Click"/>
+                                <Button x:Name="bRouteFullClose" Content="Завершить" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,152,383,0" VerticalAlignment="Top" Width="97" Height="22" IsEnabled="False" Cursor="Hand" Click="BRouteFullClose_Click"/>
                             </Grid>
                         </GroupBox>
                         <GroupBox Grid.Column="1" Header="Коррекция данных пункта назначения" Margin="20,11,7,0" Grid.Row="2" Height="136" VerticalAlignment="Top">
                             <Grid>
                                 <Label Content="Пункт назначения:" HorizontalAlignment="Left" Margin="9,9,0,0" VerticalAlignment="Top" Height="26" Width="113"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}" Height="28" Margin="127,8,299,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbDestinationCity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="127,8,299,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsReadOnly="True"/>
                                 <Label Content="Примечание:" HorizontalAlignment="Left" Margin="9,42,0,0" VerticalAlignment="Top" Height="26" Width="84"/>
-                                <TextBox Style="{StaticResource TextBoxStyle}" Height="28" Margin="98,41,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbDestinationNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="98,41,10,0" Text="" VerticalAlignment="Top" TextChanged="TBDestinationNote_TextChanged"/>
                                 <Label Content="Планируемая дата прибытия:" Margin="0,8,121,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="173" Height="26"/>
-                                <DatePicker HorizontalAlignment="Right" Margin="0,9,13,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" Height="24" Width="100"/>
-                                <Button Content="Удалить пункт назначения"  Style="{StaticResource ButtonStyle}" Margin="0,84,202,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="177" Height="22"/>
-                                <Button Content="Просмотреть заявку"  Style="{StaticResource MainButtonStyle}" Margin="0,84,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="168" Height="22"/>
-                                <Button Content="Сохранить изменения"  Style="{StaticResource ButtonStyle}" Margin="12,84,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="158" IsEnabled="False" Height="22"/>
+                                <DatePicker x:Name="dpDestinationDate" HorizontalAlignment="Right" Margin="0,9,13,0" VerticalAlignment="Top" BorderBrush="#FFB0B0B0" Height="24" Width="100" SelectedDateChanged="DPDestinationDate_SelectedDateChanged"/>
+                                <Button x:Name="bDestinationDelete" Content="Удалить пункт назначения"  Style="{StaticResource ButtonStyle}" Margin="0,84,202,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="177" Height="22" IsEnabled="False" Cursor="Hand" Click="BDestinationDelete_Click"/>
+                                <Button x:Name="bDestinationOpenRequest" Content="Просмотреть заявку"  Style="{StaticResource MainButtonStyle}" Margin="0,84,13,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="168" Height="22" IsEnabled="False" Cursor="Hand" Click="BDestinationOpenRequest_Click"/>
+                                <Button x:Name="bDestinationSaveChange" Content="Сохранить изменения"  Style="{StaticResource ButtonStyle}" Margin="12,84,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="158" IsEnabled="False" Height="22" Cursor="Hand" Click="BDestinationSaveChange_Click"/>
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -423,23 +429,23 @@
                                     <ColumnDefinition Width="262*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="Наименование фирмы*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
-                                <TextBox x:Name="tbCompanyName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="162,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <TextBox x:Name="tbCompanyName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="162,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBCompanyName_TextChanged"/>
                                 <Label Content="Адрес*:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="56"/>
-                                <TextBox x:Name="tbCompanyAddress" Style="{StaticResource TextBoxStyle}" Height="28" Margin="69,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <TextBox x:Name="tbCompanyAddress" Style="{StaticResource TextBoxStyle}" Height="28" Margin="69,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBCompanyAddress_TextChanged"/>
                                 <Label Content="Контактное лицо*:" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Height="26" Width="144"/>
-                                <TextBox x:Name="tbCompanyContactName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="132,75,191,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" IsEnabled="False"/>
+                                <TextBox x:Name="tbCompanyContactName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="132,75,191,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBCompanyContactName_TextChanged"/>
                                 <Label Content="Страна*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="62"/>
-                                <TextBox x:Name="tbCompanyCountry" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <TextBox x:Name="tbCompanyCountry" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" TextChanged="TBCompanyCountry_TextChanged"/>
                                 <Label Content="Город*:" HorizontalAlignment="Left" Margin="4,43,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="72"/>
-                                <TextBox x:Name="tbCompanyCity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <TextBox x:Name="tbCompanyCity" Style="{StaticResource TextBoxStyle}" Height="28" Margin="71,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" TextChanged="TBCompanyCity_TextChanged"/>
                                 <Label Content="Телефон контактного лица*:" Margin="0,76,0,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Right" Width="176"/>
-                                <TextBox x:Name="tbCompanyContactPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="1,75,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <TextBox x:Name="tbCompanyContactPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="1,75,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" TextChanged="TBCompanyContactPhone_TextChanged"/>
                             </Grid>
                         </GroupBox>
-                        <Button x:Name="bCompanyAdd" Content="Добавить фирму" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" Height="22"/>
-                        <Button x:Name="bCompanyDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" Height="22"/>
-                        <Button x:Name="bCompanySaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
-                        <Button x:Name="bCompanyMap" Content="Показать расположение на карте" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,346,0" Width="227" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top" Click="BCompanyMap_Click"/>
+                        <Button x:Name="bCompanyAdd" Content="Добавить фирму" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,141,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" Height="22" IsEnabled="False" Click="BCompanyAdd_Click"/>
+                        <Button x:Name="bCompanyDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" Height="22" IsEnabled="False" Click="BCompanyDelete_Click"/>
+                        <Button x:Name="bCompanySaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,141,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False" Click="BCompanySaveChange_Click"/>
+                        <Button x:Name="bCompanyMap" Content="Показать расположение на карте" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,141,346,0" Width="227" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top" Click="BCompanyMap_Click" IsEnabled="False"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ForwardersPage" Height="0" Width="0">
@@ -467,17 +473,17 @@
                                     <ColumnDefinition Width="425*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="Ф.И.О. экспедитора*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbForwarderName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbForwarderName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBForwarderName_TextChanged"/>
                                 <Label Content="Примечание:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbForwarderNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                                <TextBox x:Name="tbForwarderNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2" TextChanged="TBForwarderNote_TextChanged"/>
                                 <Label Content="Контактный телефон экспедитора*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="208"/>
-                                <TextBox x:Name="tbForwarderPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="212,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <TextBox x:Name="tbForwarderPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="212,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5" TextChanged="TBForwarderPhone_TextChanged"/>
                             </Grid>
                         </GroupBox>
-                        <Button x:Name="bForwarderAdd" Content="Добавить экспедитора" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bForwarderDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bForwarderSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
-                        <Button x:Name="bForwarderCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top"/>
+                        <Button x:Name="bForwarderAdd" Content="Добавить экспедитора" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" IsEnabled="False" Click="BForwarderAdd_Click"/>
+                        <Button x:Name="bForwarderDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" IsEnabled="False" Click="BForwarderDelete_Click"/>
+                        <Button x:Name="bForwarderSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False" Click="BForwarderSaveChange_Click"/>
+                        <Button x:Name="bForwarderCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" Grid.Row="1" Cursor="Hand" Height="22" VerticalAlignment="Top" IsEnabled="False" Click="BForwarderCopyID_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="EngineersPage" Height="0" Width="0">
@@ -505,17 +511,17 @@
                                     <ColumnDefinition Width="407*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="Ф.И.О. инженера*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbEngineerName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                                <TextBox x:Name="tbEngineerName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextChanged="TBEngineerName_TextChanged"/>
                                 <Label Content="Примечание:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbEngineerNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                                <TextBox x:Name="tbEngineerNote" Style="{StaticResource TextBoxStyle}" Height="28" Margin="97,42,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="2" TextChanged="TBEngineerNote_TextChanged"/>
                                 <Label Content="Контактный телефон инженера*:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="194"/>
-                                <TextBox x:Name="tbEngineerPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="198,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+                                <TextBox x:Name="tbEngineerPhone" Style="{StaticResource TextBoxStyle}" Height="28" Margin="198,9,12,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5" TextChanged="TBEngineerPhone_TextChanged"/>
                             </Grid>
                         </GroupBox>
-                        <Button x:Name="bEngineerAdd" Content="Добавить инженера" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bEngineerDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bEngineerSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False"/>
-                        <Button x:Name="bEngineerCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
+                        <Button x:Name="bEngineerAdd" Content="Добавить инженера" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" IsEnabled="False" Click="BEngineerAdd_Click"/>
+                        <Button x:Name="bEngineerDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" IsEnabled="False" Click="BEngineerDelete_Click"/>
+                        <Button x:Name="bEngineerSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="157" Cursor="Hand" IsEnabled="False" Click="BEngineerSaveChange_Click"/>
+                        <Button x:Name="bEngineerCopyID" Content="Скопировать ID в буфер обмена" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,346,0" Width="216" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" IsEnabled="False" Click="BEngineerCopyID_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="UsersPage" Height="0" Width="0">
@@ -545,20 +551,20 @@
                                     <ColumnDefinition Width="498*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="Логин пользователя*:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbUserLogin" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White"/>
+                                <TextBox x:Name="tbUserLogin" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,9,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White" TextChanged="TBUserLogin_TextChanged"/>
                                 <Label Content="Ф.И.О. пользователя*:" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="26" Width="134"/>
-                                <TextBox x:Name="tbUserName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White"/>
+                                <TextBox x:Name="tbUserName" Style="{StaticResource TextBoxStyle}" Height="28" Margin="147,42,21,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" BorderBrush="White" TextChanged="TBUserName_TextChanged"/>
                                 <Label Content="Роль*:" HorizontalAlignment="Right" Margin="0,10,197,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="44"/>
-                                <ComboBox x:Name="cbUserRole" Margin="0,12,15,0" VerticalAlignment="Top" Grid.Column="1" Height="21" HorizontalAlignment="Right" Width="177"/>
+                                <ComboBox x:Name="cbUserRole" Margin="0,12,15,0" VerticalAlignment="Top" Grid.Column="1" Height="21" HorizontalAlignment="Right" Width="177" SelectionChanged="CBUserRole_SelectionChanged"/>
                                 <Label Content="ID ссылки:" HorizontalAlignment="Left" Margin="4,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="68"/>
-                                <TextBox x:Name="tbUserSnapping" Style="{StaticResource TextBoxStyle}" Height="28" Margin="77,9,247,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5" BorderBrush="White"/>
+                                <TextBox x:Name="tbUserSnapping" Style="{StaticResource TextBoxStyle}" Height="28" Margin="77,9,247,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5" BorderBrush="White" TextChanged="TBUserSnapping_TextChanged"/>
                                 <Label Content="Инф. по ссылке:" HorizontalAlignment="Left" Margin="4,44,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="103"/>
-                                <ComboBox x:Name="cbUserSnappingInfo" Grid.Column="1" Margin="112,46,15,0" VerticalAlignment="Top" Height="21"/>
+                                <ComboBox x:Name="cbUserSnappingInfo" Grid.Column="1" Margin="112,46,15,0" VerticalAlignment="Top" Height="21" SelectionChanged="CBUserSnappingInfo_SelectionChanged"/>
                             </Grid>
                         </GroupBox>
-                        <Button x:Name="bUserAdd" Content="Добавить пользователя" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bUserDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand"/>
-                        <Button x:Name="bUserSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" Cursor="Hand" IsEnabled="False"/>
+                        <Button x:Name="bUserAdd" Content="Добавить пользователя" Style="{StaticResource MainButtonStyle}" HorizontalAlignment="Right" Margin="0,108,31,0" VerticalAlignment="Top" Width="162" Grid.Row="1" Cursor="Hand" Click="BUserAdd_Click"/>
+                        <Button x:Name="bUserDelete" Content="Удалить запись" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Right" Margin="0,108,208,0" Width="123" VerticalAlignment="Top" Grid.Row="1" Cursor="Hand" Click="BUserDelete_Click"/>
+                        <Button x:Name="bUserSaveChange" Content="Cохранить изменения" Style="{StaticResource ButtonStyle}" Margin="35,108,0,0" FontFamily="/Forwarder;component/Resources/#Helvetica CE" Grid.Row="1" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" Cursor="Hand" IsEnabled="False" Click="BUserSaveChange_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="ServerPage" Height="0" Width="0">

@@ -36,7 +36,7 @@ namespace Forwarder.AdditionalWindows
             this.Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height * 0.125;
             this.Left = SystemParameters.WorkArea.Left + SystemParameters.WorkArea.Width * 0.125;
 
-            webBrowser.Navigate(new Uri("https://maps.google.com/maps?q=" + place.Replace(",", "").Replace("д.", "").Replace("ул.", "").Replace("просп.", "")));
+            webBrowser.Navigate(new Uri("https://maps.google.com/maps?q=" + place));
             mainTitle.Content = "Карты - " + place;
         }
 

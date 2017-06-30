@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Forwarder
 {
@@ -44,19 +46,24 @@ namespace Forwarder
         private List<ClassResource.Forwarder> FORWARDERS;
         private List<ClassResource.Company> COMPANIES;
         private List<ClassResource.Request> REQUESTS;
+        private List<ClassResource.Destination> DESTINATIONS;
+        private List<ClassResource.Route> ROUTES;
 
         private ClassResource.User SELECTUSER;
         private ClassResource.Engineer SELECTENGINEER;
         private ClassResource.Forwarder SELECTFORWARDER;
         private ClassResource.Company SELECTCOMPANY;
         private ClassResource.Request SELECTREQUEST;
+        private ClassResource.Destination SELECTDESTINATION;
+        private ClassResource.Route SELECTROUTE;
 
         public String USERLOGIN = "";
         public String USERNAME = "";
         public String USERROLE = "";
+        public String USERSNAPPING = "";
 
         private const double minWidth = 900;
-        private const double minHight = 600;
+        private const double minHeight = 600;
 
         private const String APPNAME = "Forwarder Tools 1.0";
 
@@ -68,12 +75,11 @@ namespace Forwarder
             Properties.Settings.Default.Save();
             Sources.Functions.MAINWINDOW = this;
 
-            this.Height = SystemParameters.WorkArea.Height * 0.8;
-            this.Width = SystemParameters.WorkArea.Width * 0.8;
-            this.Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height * 0.1;
-            this.Left = SystemParameters.WorkArea.Left + SystemParameters.WorkArea.Width * 0.1;
+            this.Height = SystemParameters.WorkArea.Height * 0.8 < minHeight ? minHeight : SystemParameters.WorkArea.Height * 0.8;
+            this.Width = SystemParameters.WorkArea.Width * 0.8 < minWidth ? minWidth : SystemParameters.WorkArea.Width * 0.8;
+            //this.Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height * 0.1;
+            //this.Left = SystemParameters.WorkArea.Left + SystemParameters.WorkArea.Width * 0.1;
 
-            HideAll();
             InitComponent();
         }
 
@@ -82,29 +88,32 @@ namespace Forwarder
             switch (USERROLE)
             {
                 case "Администратор":
-                    usersPage.Visibility = Visibility.Visible;
-                    UsersPage.Visibility = Visibility.Visible;
-
-                    engineersPage.Visibility = Visibility.Visible;
-                    EngineersPage.Visibility = Visibility.Visible;
-
-                    forwardersPage.Visibility = Visibility.Visible;
-                    ForwardersPage.Visibility = Visibility.Visible;
-
-                    companiesPage.Visibility = Visibility.Visible;
-                    CompaniesPage.Visibility = Visibility.Visible;
-
-                    requestsPage.Visibility = Visibility.Visible;
-                    RequestsPage.Visibility = Visibility.Visible;
-
-                    routesPage.Visibility = Visibility.Visible;
-                    RoutesPage.Visibility = Visibility.Visible;
-
                     Sources.Client.SendMessage("UpdateAllData", new String[] { });
                     
-                    tcPages.SelectedItem = ForwardersPage;
+                    tcPages.SelectedItem = RequestsPage;
+
+                    bCompanyAdd.IsEnabled = true;
+                    bEngineerAdd.IsEnabled = true;
+                    bForwarderAdd.IsEnabled = true;
+                    
                     break;
+
                 case "Инженер":
+                    Sources.Client.SendMessage("UpdateAllData", new String[] { });
+
+                    engineersPage.Height = 0;
+                    tcPages.Items.Remove(EngineersPage);
+
+                    usersPage.Height = 0;
+                    tcPages.Items.Remove(UsersPage);
+
+                    serverPage.Height = 0;
+                    tcPages.Items.Remove(ServerPage);
+
+                    bRequestAdd.IsEnabled = true;
+                    bCompanyAdd.IsEnabled = true;
+
+                    tcPages.SelectedItem = RequestsPage;
                     break;
                 case "Экспедитор":
                     break;
@@ -120,6 +129,12 @@ namespace Forwarder
             cbUserRole.Items.Add("Экспедитор");
             cbUserRole.Items.Add("Руководитель экспедиторов");
             cbUserRole.Items.Add("Администратор");
+
+            cbRouteCar.Items.Clear();
+            cbRouteCar.Items.Add("Легковой");
+            cbRouteCar.Items.Add("Фургон");
+            cbRouteCar.Items.Add("Платформа");
+            cbRouteCar.Items.Add("Тентованный");
         }
 
         #region Реализация скрытия всех элементов
@@ -279,7 +294,7 @@ namespace Forwarder
                     this.Width = newWidth;
                     positionXRightBottomResize = e.GetPosition(this).X;
                 }
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     positionYRightBottomResize = e.GetPosition(this).Y;
@@ -300,7 +315,7 @@ namespace Forwarder
                     this.Width = newWidth;
                     this.Left = newLeft;
                 }
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     this.Top = newTop;
@@ -320,7 +335,7 @@ namespace Forwarder
                     this.Width = newWidth;
                     this.Left = newLeft;
                 }
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     positionYLeftBottomResize = e.GetPosition(this).Y;
@@ -340,7 +355,7 @@ namespace Forwarder
                     this.Width = newWidth;
                     positionXRightTopResize = e.GetPosition(this).X;
                 }
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     this.Top = newTop;
@@ -367,7 +382,7 @@ namespace Forwarder
             if (isBottomResize && !Properties.Settings.Default.Maximized)
             {
                 double newHeight = this.Height + (e.GetPosition(this).Y - positionBottomResize);
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     positionBottomResize = e.GetPosition(this).Y;
@@ -381,7 +396,7 @@ namespace Forwarder
             {
                 double newHeight = this.Height - (e.GetPosition(this).Y - positionTopResize);
                 double newTop = this.Top + (e.GetPosition(this).Y - positionTopResize);
-                if (newHeight > minHight + 40)
+                if (newHeight > minHeight + 40)
                 {
                     this.Height = newHeight;
                     this.Top = newTop;
@@ -504,7 +519,7 @@ namespace Forwarder
         {
             switch (((TabItem)tcPages.SelectedItem).Name)
             {
-                case "RequstsPage":
+                case "RequestsPage":
                     mainTitle.Content = "Заявки";
                     this.Title = APPNAME + " - Заявки";
                     requestsPage.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC8C8C8"));
@@ -666,16 +681,33 @@ namespace Forwarder
             }
             if(lvUsers.Items.Count > 0)
             {
-                lvUsers.SelectedIndex = 0;
+                if (SELECTUSER != null)
+                {
+                    foreach (var item in lvUsers.Items)
+                    {
+                        if (((UserListItem)item).Login == SELECTUSER.Login)
+                        {
+                            lvUsers.SelectedItem = item;
+                            break;
+                        }
+                    }
+                    if(lvUsers.SelectedIndex == -1) lvUsers.SelectedIndex = 0;
+                }
+                else
+                    lvUsers.SelectedIndex = 0;
             }
         }
 
         public void UpdateUsers(List<String> users)
         {
             cbUserSnappingInfo.Items.Clear();
-            foreach (String user in users)
+            foreach (var item in ENGINEERS)
             {
-                cbUserSnappingInfo.Items.Add(user);
+                cbUserSnappingInfo.Items.Add(item.Name + "(Инженер)");
+            }
+            foreach (var item in FORWARDERS)
+            {
+                cbUserSnappingInfo.Items.Add(item.Name + "(Экспедитор)");
             }
         }
         #endregion
@@ -692,7 +724,6 @@ namespace Forwarder
                 tbUserName.Text = SELECTUSER.Name;
                 tbUserSnapping.Text = SELECTUSER.Snapping;
                 cbUserRole.SelectedItem = SELECTUSER.Role;
-                cbUserSnappingInfo.SelectedItem = (SELECTUSER.Snapping == "") ? "Не определена" : (SELECTUSER.Engineer != "" ? SELECTUSER.Engineer + " (Инженер)" : SELECTUSER.Forwarder + " (Экспедитор)");
             }
             else
             {
@@ -707,8 +738,7 @@ namespace Forwarder
         }
         #endregion
 
-
-        
+                
         class UserListItem
         {
             public String Login { get; set; }
@@ -773,8 +803,7 @@ namespace Forwarder
                 this.PhoneContactPerson = phoneContactPerson;
             }
         }
-
-
+        
         class RequestListItem
         {
             public String ID { get; set; }
@@ -799,8 +828,40 @@ namespace Forwarder
             }
         
         }
-    
-        
+
+        class RouteListItem
+        {
+            public String ID { get; set; }
+            public String Number { get; set; }
+            public String Status { get; set; }
+
+            public RouteListItem(String id, String number, String status)
+            {
+                this.ID = id;
+                this.Number = number;
+                this.Status = status;
+            }
+        }
+
+        class DestinationListItem
+        {
+            public String ID { get; set; }
+            public String Number { get; set; }
+            public String Request { get; set; }
+            public String Address { get; set; }
+            public String Date { get; set; }
+
+            public DestinationListItem(String id, String number, String request, String address, String date)
+            {
+                this.ID = id;
+                this.Number = number;
+                this.Address = address;
+                this.Date = date;
+                this.Request = request;
+            }
+        }
+
+
         private bool IsInName(String name, String str)
         {
             foreach (String item in name.Split(' '))
@@ -845,14 +906,27 @@ namespace Forwarder
         public void UpdateEngineersData(List<ClassResource.Engineer> engineers)
         {
             ENGINEERS = engineers;
-            lvEngineers.Items.Clear();
-            foreach (ClassResource.Engineer engineer in ENGINEERS)
+            if (USERROLE != "Инженер")
             {
-                lvEngineers.Items.Add(new EngineerListItem(engineer.ID, engineer.Name, engineer.ContactNumber));
-            }
-            if (lvEngineers.Items.Count > 0)
-            {
-                lvEngineers.SelectedIndex = 0;
+                lvEngineers.Items.Clear();
+                foreach (ClassResource.Engineer engineer in ENGINEERS)
+                {
+                    lvEngineers.Items.Add(new EngineerListItem(engineer.ID, engineer.Name, engineer.ContactNumber));
+                }
+                if (lvEngineers.Items.Count > 0)
+                {
+                    if (SELECTENGINEER != null)
+                        foreach (var item in lvEngineers.Items)
+                        {
+                            if (((EngineerListItem)item).ID == SELECTENGINEER.ID)
+                            {
+                                lvEngineers.SelectedItem = item;
+                                break;
+                            }
+                        }
+                    else
+                        lvEngineers.SelectedIndex = 0;
+                }
             }
         }
         #endregion
@@ -924,7 +998,23 @@ namespace Forwarder
             }
             if (lvForwarders.Items.Count > 0)
             {
-                lvForwarders.SelectedIndex = 0;
+                if (SELECTFORWARDER != null)
+                    foreach (var item in lvForwarders.Items)
+                    {
+                        if (((ForwarderListItem)item).ID == SELECTFORWARDER.ID)
+                        {
+                            lvForwarders.SelectedItem = item;
+                            break;
+                        }
+                    }
+                else
+                    lvForwarders.SelectedIndex = 0;
+            }
+
+            cbRouteForwarder.Items.Clear();
+            foreach (var item in FORWARDERS)
+            {
+                cbRouteForwarder.Items.Add(item.Name);
             }
         }
         #endregion
@@ -935,8 +1025,8 @@ namespace Forwarder
             if(lvForwarders.SelectedIndex >= 0)
             {
                 SELECTFORWARDER = FORWARDERS.Find(x => x.ID == ((ForwarderListItem)lvForwarders.SelectedItem).ID);
-                bForwarderDelete.IsEnabled = true;
-                bForwarderCopyID.IsEnabled = true;
+                if (USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") bForwarderDelete.IsEnabled = true;
+                if (USERROLE == "Администратор") bForwarderCopyID.IsEnabled = true;
                 bForwarderSaveChange.IsEnabled = false;
                 tbForwarderName.Text = SELECTFORWARDER.Name;
                 tbForwarderPhone.Text = SELECTFORWARDER.ContactNumber;
@@ -996,7 +1086,17 @@ namespace Forwarder
             }
             if (lvCompanies.Items.Count > 0)
             {
-                lvCompanies.SelectedIndex = 0;
+                if (SELECTCOMPANY != null)
+                    foreach (var item in lvCompanies.Items)
+                    {
+                        if (((CompanyListItem)item).ID == SELECTCOMPANY.ID)
+                        {
+                            lvCompanies.SelectedItem = item;
+                            break;
+                        }
+                    }
+                else
+                    lvCompanies.SelectedIndex = 0;
             }
         }
         #endregion
@@ -1070,11 +1170,22 @@ namespace Forwarder
             lvRequests.Items.Clear();
             foreach (ClassResource.Request request in REQUESTS)
             {
-                lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
+                if(USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
+                    lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
             }
             if (lvRequests.Items.Count > 0)
             {
-                lvRequests.SelectedIndex = 0;
+                if (SELECTREQUEST != null)
+                    foreach (var item in lvRequests.Items)
+                    {
+                        if(((RequestListItem)item).ID == SELECTREQUEST.ID)
+                        {
+                            lvRequests.SelectedItem = item;
+                            break;
+                        }
+                    } 
+                else
+                    lvRequests.SelectedIndex = 0;
             }
         }
         #endregion
@@ -1086,7 +1197,7 @@ namespace Forwarder
             {
                 SELECTREQUEST = REQUESTS.Find(x => x.ID == ((RequestListItem)lvRequests.SelectedItem).ID);
                 bRequestDelete.IsEnabled = true;
-                bRequestDistribute.IsEnabled = true;
+                if(USERROLE == "Руководитель экспедиторов") bRequestDistribute.IsEnabled = true;
                 bRequestOpen.IsEnabled = true;
                 bRequestSaveChange.IsEnabled = false;
                 tbRequestNumber.Text = SELECTREQUEST.Number;
@@ -1120,8 +1231,9 @@ namespace Forwarder
                 lvRequests.Items.Clear();
                 foreach (ClassResource.Request request in REQUESTS)
                 {
-                    if (request.Number.IndexOf(tbRequestSearch.Text, StringComparison.OrdinalIgnoreCase) == 0 || request.ProductName.Contains(tbRequestSearch.Text) || COMPANIES.Find(x => x.ID == SELECTREQUEST.IDCompany).Name.Contains(tbRequestSearch.Text))
-                        lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
+                    if (USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
+                        if (request.Number.IndexOf(tbRequestSearch.Text, StringComparison.OrdinalIgnoreCase) == 0 || request.ProductName.Contains(tbRequestSearch.Text) || COMPANIES.Find(x => x.ID == SELECTREQUEST.IDCompany).Name.Contains(tbRequestSearch.Text))
+                            lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
                 }
                 if (lvRequests.Items.Count > 0)
                 {
@@ -1133,7 +1245,8 @@ namespace Forwarder
                 lvRequests.Items.Clear();
                 foreach (ClassResource.Request request in REQUESTS)
                 {
-                    lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
+                    if (USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
+                        lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
                 }
                 if (lvRequests.Items.Count > 0)
                 {
@@ -1143,10 +1256,140 @@ namespace Forwarder
         }
         #endregion
 
+        #region ПУНКТЫ НАЗНАЧЕНИЯ Обновление данных на странице
+        public void UpdateDestinationsData(List<ClassResource.Destination> destinations)
+        {
+            DESTINATIONS = destinations;
+        }
+        #endregion
+
+        #region ПУНКТЫ НАЗНАЧЕНИЯ Обработка выбора пункта назначения
+        private void LVDestinations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvDestinations.SelectedIndex >= 0)
+            {
+                SELECTDESTINATION = DESTINATIONS.Find(x => x.ID == ((DestinationListItem)lvDestinations.SelectedItem).ID);
+                bDestinationSaveChange.IsEnabled = false;
+                if (USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") bDestinationDelete.IsEnabled = true;
+                bDestinationOpenRequest.IsEnabled = true;
+                tbDestinationCity.Text = COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == SELECTDESTINATION.IDRequest).IDCompany).City;
+                tbDestinationNote.Text = SELECTDESTINATION.Note;
+                dpDestinationDate.Text = SELECTDESTINATION.ArrivalDate;
+            }
+            else
+            {
+                bDestinationSaveChange.IsEnabled = false;
+                bDestinationDelete.IsEnabled = false;
+                bDestinationOpenRequest.IsEnabled = false;
+                tbDestinationCity.Text = "";
+                tbDestinationNote.Text = "";
+                dpDestinationDate.Text = "";
+            }
+        }
+        #endregion
+
+        #region МАРШРУТЫ Обновление данных на странице Маршруты
+        public void UpdateRoutesData(List<ClassResource.Route> routes)
+        {
+            ROUTES = routes;
+            lvRoutes.Items.Clear();
+            foreach (ClassResource.Route route in ROUTES)
+            {
+                lvRoutes.Items.Add(new RouteListItem(route.ID, route.Name, route.RouteStatus));
+            }
+            if (lvRoutes.Items.Count > 0)
+            {
+                if (SELECTROUTE != null)
+                    foreach (var item in lvRoutes.Items)
+                    {
+                        if (((RouteListItem)item).ID == SELECTROUTE.ID)
+                        {
+                            lvRoutes.SelectedItem = item;
+                            break;
+                        }
+                    }
+                else
+                    lvRoutes.SelectedIndex = 0;
+            }
+        }
+        #endregion
+
+        #region МАРШРУТЫ Обработка выбора маршрута
+        private void LVRoutes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvRoutes.SelectedIndex >= 0)
+            {
+                SELECTROUTE = ROUTES.Find(x => x.ID == ((RouteListItem)lvRoutes.SelectedItem).ID);
+                if (USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") bRouteAdd.IsEnabled = true;
+                if (USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") bRouteDelete.IsEnabled = true;
+                if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTROUTE.RouteStatus == "Открыт") bRouteClose.IsEnabled = true;
+                else bRouteClose.IsEnabled = false;
+                if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTROUTE.RouteStatus == "Закрыт") bRouteFullClose.IsEnabled = true;
+                else bRouteFullClose.IsEnabled = false;
+                bRouteSaveChange.IsEnabled = false;
+                tbRouteNumber.Text = SELECTROUTE.Name;
+                tbRouteNote.Text = SELECTROUTE.Note;
+                dpRouteDepartureDate.Text = SELECTROUTE.DepartureDate;
+                dpRouteReturnDate.Text = SELECTROUTE.ReturnDate;
+                cbRouteCar.Text = SELECTROUTE.CarType;
+                if (SELECTROUTE.IDForwarder != "") cbRouteForwarder.SelectedItem = FORWARDERS.Find(x => x.ID == SELECTROUTE.IDForwarder).Name;
+                else cbRouteForwarder.Text = "";
+                tbRouteRoute.Text = SELECTROUTE.CityCountryDeparture;
+                lvDestinations.Items.Clear();
+                List<ClassResource.Destination> temp = DESTINATIONS.FindAll(x => x.IDRoute == SELECTROUTE.ID);
+                temp.Sort((a, b) => (a.Number.CompareTo(b.Number)));
+                foreach (var item in temp)
+                {
+                    if(tbRouteRoute.Text.LastIndexOf(COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City) != tbRouteRoute.Text.Length - COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City.Length)
+                        tbRouteRoute.Text += " - " + COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City;
+                    lvDestinations.Items.Add(new DestinationListItem(item.ID, item.Number, REQUESTS.Find(y => y.ID == item.IDRequest).Number, COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City + "(" + COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).Country + ")", item.ArrivalDate.Substring(0, 10)));
+                }
+                tbRouteRoute.Text += " - " + SELECTROUTE.CityCountryDeparture;
+                if (lvDestinations.Items.Count > 0)
+                {
+                    if (SELECTDESTINATION != null)
+                        foreach (var item in lvDestinations.Items)
+                        {
+                            if (((DestinationListItem)item).ID == SELECTDESTINATION.ID)
+                            {
+                                lvDestinations.SelectedItem = item;
+                                break;
+                            }
+                        }
+                    else
+                        lvDestinations.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                bRouteAdd.IsEnabled = false;
+                bRouteDelete.IsEnabled = false;
+                bRouteClose.IsEnabled = false;
+                bRouteSaveChange.IsEnabled = false;
+                bRouteFullClose.IsEnabled = false;
+                tbRouteNumber.Text = "";
+                tbRouteNote.Text = "";
+                dpRouteDepartureDate.Text = "";
+                dpRouteReturnDate.Text = "";
+                cbRouteCar.SelectedItem = "";
+                cbRouteForwarder.SelectedItem = "";
+                tbRouteRoute.Text = "";
+                lvDestinations.Items.Clear();
+            }
+        }
+        #endregion
+
         private void BRequestAdd_Click(object sender, RoutedEventArgs e)
         {
-            AdditionalWindows.Request request = new AdditionalWindows.Request(COMPANIES, USERNAME, "+375 (23) 544-56-56");
-            request.Show();
+            if (ENGINEERS.Find(x => x.ID == USERSNAPPING) != null)
+            {
+                AdditionalWindows.Request request = new AdditionalWindows.Request(COMPANIES, USERNAME, ENGINEERS.Find(x => x.ID == USERSNAPPING).ContactNumber);
+                request.Show();
+            }
+            else
+            {
+                Dialogs.Dialog.ShowWarming("Вы не имеете прав на данное действие.", "Обратитесь к Администратору для получения соответствующих прав.", "Предупреждение: ошибка доступа");
+            }
         }
 
         private void BRequestOpen_Click(object sender, RoutedEventArgs e)
@@ -1159,6 +1402,528 @@ namespace Forwarder
         {
             AdditionalWindows.Map map = new AdditionalWindows.Map(SELECTCOMPANY.Address);
             map.Show();
+        }
+
+        private void BCompanyDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if(Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить эту фирму из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteCompany", new String[] { SELECTCOMPANY.ID });
+                SELECTCOMPANY = null;
+            }
+        }
+
+        private void BCompanyAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Company company = new AdditionalWindows.Company();
+            company.Show();
+        }
+
+        #region IsCompanyDataChange
+        private void IsCompanyDataChange()
+        {
+            if((USERROLE == "Администратор" || USERROLE == "Инженер") && SELECTCOMPANY != null)
+            {
+                if(tbCompanyName.Text != SELECTCOMPANY.Name || 
+                    tbCompanyAddress.Text != SELECTCOMPANY.Address || 
+                    tbCompanyCity.Text != SELECTCOMPANY.City || 
+                    tbCompanyCountry.Text != SELECTCOMPANY.Country || 
+                    tbCompanyContactName.Text != SELECTCOMPANY.NameСontactPerson || 
+                    tbCompanyContactPhone.Text != SELECTCOMPANY.PhoneContactPerson)
+                {
+                    bCompanySaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bCompanySaveChange.IsEnabled = false;
+                }
+            }
+        }
+
+        private void TBCompanyName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        private void TBCompanyAddress_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        private void TBCompanyContactName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        private void TBCompanyCountry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        private void TBCompanyCity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        private void TBCompanyContactPhone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsCompanyDataChange();
+        }
+
+        #endregion
+
+        private void BCompanySaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if(tbCompanyName.Text == "" || tbCompanyAddress.Text == "" || tbCompanyContactName.Text == "" || tbCompanyContactPhone.Text == "" || tbCompanyCountry.Text == "" || tbCompanyCity.Text == "")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.Company company = new ClassResource.Company(SELECTCOMPANY.ID, tbCompanyName.Text, tbCompanyCountry.Text, tbCompanyCity.Text, tbCompanyAddress.Text, tbCompanyContactName.Text, tbCompanyContactPhone.Text);
+            Sources.Client.SendMessage("UpdateCompany", new String[] { JsonConvert.SerializeObject(company) });
+            bCompanySaveChange.IsEnabled = false;
+        }
+
+        #region IsForwarderDataChange
+        private void IsForwarderDataChange()
+        {
+            if ((USERROLE == "Администратор" || USERROLE == "Руководитель экспедиторов") && SELECTFORWARDER != null)
+            {
+                if (tbForwarderName.Text != SELECTFORWARDER.Name ||
+                    tbForwarderPhone.Text != SELECTFORWARDER.ContactNumber ||
+                    tbForwarderNote.Text != SELECTFORWARDER.Note)
+                {
+                    bForwarderSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bForwarderSaveChange.IsEnabled = false;
+                }
+            }
+        }
+
+        private void TBForwarderName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsForwarderDataChange();
+        }
+
+        private void TBForwarderPhone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsForwarderDataChange();
+        }
+
+        private void TBForwarderNote_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsForwarderDataChange();
+        }
+
+        #endregion
+
+        private void BForwarderSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbForwarderName.Text == "" || tbForwarderPhone.Text == "")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.Forwarder forwarder = new ClassResource.Forwarder(SELECTFORWARDER.ID, tbForwarderName.Text, tbForwarderPhone.Text, tbForwarderNote.Text);
+            Sources.Client.SendMessage("UpdateForwarder", new String[] { JsonConvert.SerializeObject(forwarder) });
+            bForwarderSaveChange.IsEnabled = false;
+        }
+
+        private void BForwarderDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить этого экспедитора из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteForwarder", new String[] { SELECTFORWARDER.ID });
+                SELECTFORWARDER = null;
+            }
+        }
+
+        private void BForwarderCopyID_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, (Object)SELECTFORWARDER.ID);
+        }
+
+        private void BForwarderAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.ForwarderWindow forwarder = new AdditionalWindows.ForwarderWindow();
+            forwarder.Show();
+        }
+
+        #region IsEngineerDataChange
+        private void IsEngineerDataChange()
+        {
+            if (USERROLE == "Администратор" && SELECTENGINEER != null)
+            {
+                if (tbEngineerName.Text != SELECTENGINEER.Name ||
+                    tbEngineerPhone.Text != SELECTENGINEER.ContactNumber ||
+                    tbEngineerNote.Text != SELECTENGINEER.Note)
+                {
+                    bEngineerSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bEngineerSaveChange.IsEnabled = false;
+                }
+            }
+        }
+
+        private void TBEngineerName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsEngineerDataChange();
+        }
+
+        private void TBEngineerPhone_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsEngineerDataChange();
+        }
+
+        private void TBEngineerNote_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsEngineerDataChange();
+        }
+
+        #endregion
+
+        private void BEngineerAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Engineer engineer = new AdditionalWindows.Engineer();
+            engineer.Show();
+        }
+
+        private void BEngineerSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbEngineerName.Text == "" || tbEngineerPhone.Text == "")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.Engineer engineer = new ClassResource.Engineer(SELECTENGINEER.ID, tbEngineerName.Text, tbEngineerPhone.Text, tbEngineerNote.Text);
+            Sources.Client.SendMessage("UpdateEngineer", new String[] { JsonConvert.SerializeObject(engineer) });
+            bForwarderSaveChange.IsEnabled = false;
+        }
+
+        private void BEngineerCopyID_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData(DataFormats.Text, (Object)SELECTENGINEER.ID);
+        }
+
+        private void BEngineerDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить этого инженера из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteEngineer", new String[] { SELECTENGINEER.ID });
+                SELECTENGINEER = null;
+            }
+        }
+
+        private void BUserAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.User user = new AdditionalWindows.User(ENGINEERS, FORWARDERS, USERS);
+            user.Show();
+        }
+
+
+        #region IsUserDataChange
+
+        Regex regexLogin = new Regex(@"^[A-Za-z][A-Za-z0-9_-]{2,}$");
+        Regex regexPassword = new Regex(@"^[A-Za-z0-9_-]{4,}$");
+
+        private void IsUserDataChange()
+        {
+            if (USERROLE == "Администратор" && SELECTUSER != null && cbUserRole.SelectedItem != null)
+            {
+                if (tbUserLogin.Text != SELECTUSER.Login ||
+                    tbUserName.Text != SELECTUSER.Name ||
+                    tbUserSnapping.Text != SELECTUSER.Snapping ||
+                    cbUserRole.SelectedItem.ToString() != SELECTUSER.Role)
+                {
+                    bUserSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bUserSaveChange.IsEnabled = false;
+                }
+            }
+        }
+        private void TBUserLogin_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsUserDataChange();
+        }
+
+        private void TBUserName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsUserDataChange();
+        }
+
+        private void TBUserSnapping_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsUserDataChange();
+            foreach (var item in ENGINEERS)
+            {
+                if (item.ID == tbUserSnapping.Text)
+                {
+                    cbUserSnappingInfo.SelectedItem = item.Name + "(Инженер)";
+                    return;
+                }
+            }
+            foreach (var item in FORWARDERS)
+            {
+                if (item.ID == tbUserSnapping.Text)
+                {
+                    cbUserSnappingInfo.SelectedItem = item.Name + "(Экспедитор)";
+                    return;
+                }
+            }
+            cbUserSnappingInfo.SelectedIndex = -1;
+            cbUserSnappingInfo.Text = "";
+        }
+
+        private void CBUserRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsUserDataChange();
+        }
+
+        private void CBUserSnappingInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbUserSnappingInfo.SelectedIndex >= 0)
+            {
+                if (cbUserSnappingInfo.SelectedIndex >= ENGINEERS.Count)
+                {
+                    if(tbUserSnapping.Text != FORWARDERS[cbUserSnappingInfo.SelectedIndex - ENGINEERS.Count].ID)
+                        tbUserSnapping.Text = FORWARDERS[cbUserSnappingInfo.SelectedIndex - ENGINEERS.Count].ID;
+                }
+                else
+                {
+                    if(tbUserSnapping.Text != ENGINEERS[cbUserSnappingInfo.SelectedIndex].ID)
+                        tbUserSnapping.Text = ENGINEERS[cbUserSnappingInfo.SelectedIndex].ID;
+                }
+            }
+        }
+        #endregion
+
+        private void BUserSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbUserLogin.Text == "" || tbUserName.Text == "" || cbUserRole.SelectedIndex < 0)
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+            if (!regexLogin.IsMatch(tbUserLogin.Text))
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Логин введен некорректно.", "Некорректное заполнение");
+                return;
+            }
+            if (USERS.Find(x => x.Login == tbUserLogin.Text) != null && tbUserLogin.Text != SELECTUSER.Login)
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Пользователь с таким логином уже существует.", "Некорректное заполнение");
+                return;
+            }
+            if (cbUserSnappingInfo.SelectedIndex < 0 && cbUserRole.SelectedItem.ToString() == "Инженер")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Для инженера обязательна ссылка.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.User user = new ClassResource.User(tbUserLogin.Text, tbUserName.Text, cbUserRole.SelectedItem.ToString(), tbUserSnapping.Text, SELECTUSER.Login, null, null);
+            Sources.Client.SendMessage("UpdateUser", new String[] { JsonConvert.SerializeObject(user) });
+            bUserSaveChange.IsEnabled = false;
+        }
+
+        private void BUserDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (SELECTUSER.Login == USERLOGIN)
+            {
+                Dialogs.Dialog.ShowWarming("Удаление невозможно!", "Вы не можете удалить себя.", "Удаление невозможно");
+                return;
+            }
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить этого пользователя из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteUser", new String[] { SELECTUSER.Login });
+                SELECTUSER = null;
+            }
+        }
+
+        private void BRouteAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Sources.Client.SendMessage("AddRoute", new String[] {  });
+        }
+
+        private void BRouteDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить этот маршрут из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteRoute", new String[] { SELECTROUTE.ID });
+                SELECTROUTE = null;
+            }
+        }
+
+        private void BDestinationOpenRequest_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Request request = new AdditionalWindows.Request(COMPANIES, REQUESTS.Find(x => x.ID == SELECTDESTINATION.IDRequest), ENGINEERS.Find(x => x.ID == REQUESTS.Find(y => y.ID == SELECTDESTINATION.IDRequest).IDEngineer).Name, ENGINEERS.Find(x => x.ID == REQUESTS.Find(y => y.ID == SELECTDESTINATION.IDRequest).IDEngineer).ContactNumber);
+            request.Show();
+        }
+
+        #region IsRouteDataChange
+        private void IsRouteDataChange()
+        {
+            if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTROUTE != null)
+            {
+                if ((tbRouteNumber.Text != SELECTROUTE.Name ||
+                    tbRouteNote.Text != SELECTROUTE.Note ||
+                    dpRouteDepartureDate.Text != (SELECTROUTE.DepartureDate != "" ? SELECTROUTE.DepartureDate.Substring(0, 10) : "") ||
+                    dpRouteReturnDate.Text != (SELECTROUTE.ReturnDate != "" ? SELECTROUTE.ReturnDate.Substring(0, 10) : "") ||
+                    cbRouteCar.Text != SELECTROUTE.CarType ||
+                    (SELECTROUTE.IDForwarder != "" ? (cbRouteForwarder.Text != FORWARDERS.Find(x => x.ID == SELECTROUTE.IDForwarder).Name) : cbRouteForwarder.Text != "")) &&
+                    SELECTROUTE.RouteStatus == "Открыт")
+                {
+                    bRouteSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bRouteSaveChange.IsEnabled = false;
+                }
+            }
+        }
+
+        private void TBRouteNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void TBRouteRoute_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void CBRouteForwarder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void CBRouteCar_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void TBRouteNote_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void DPRouteDepartureDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+
+        private void DPRouteReturnDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsRouteDataChange();
+        }
+        #endregion
+
+        private void BRouteSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbRouteNumber.Text == "")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.Route route = new ClassResource.Route(SELECTROUTE.ID, tbRouteNumber.Text, dpRouteDepartureDate.Text, cbRouteCar.Text, dpRouteReturnDate.Text, null, null, tbRouteNote.Text, cbRouteForwarder.SelectedIndex >= 0 ? FORWARDERS[cbRouteForwarder.SelectedIndex].ID : null);
+            Sources.Client.SendMessage("UpdateRoute", new String[] { JsonConvert.SerializeObject(route) });
+            bRouteSaveChange.IsEnabled = false;
+        }
+
+        private void BRouteClose_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите закрыть этот маршрут?", "После закрытия восстановление невозможно.", "Закрытие маршрута"))
+            {
+                Sources.Client.SendMessage("ChangeRouteStatus", new String[] { "Закрыт", SELECTROUTE.ID });
+            }
+        }
+
+        private void BRouteFullClose_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите завершить этот маршрут?", "После завершения восстановление невозможно.", "Завершение маршрута"))
+            {
+                Sources.Client.SendMessage("ChangeRouteStatus", new String[] { "Завершен", SELECTROUTE.ID });
+            }
+        }
+
+        private void BDestinationSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            ClassResource.Destination destination = new ClassResource.Destination(SELECTDESTINATION.ID, dpDestinationDate.Text, tbDestinationNote.Text, null, null, null);
+            Sources.Client.SendMessage("UpdateDestination", new String[] { JsonConvert.SerializeObject(destination) });
+            bDestinationSaveChange.IsEnabled = false;
+        }
+
+        #region IsDestinationDataChange
+        private void IsDestinationDataChange()
+        {
+            if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTDESTINATION != null)
+            {
+                if ((dpDestinationDate.Text != (SELECTDESTINATION.ArrivalDate != "" ? SELECTDESTINATION.ArrivalDate.Substring(0, 10) : "") ||
+                    tbDestinationNote.Text != SELECTDESTINATION.Note) &&
+                    SELECTROUTE.RouteStatus == "Открыт")
+                {
+                    bDestinationSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bDestinationSaveChange.IsEnabled = false;
+                }
+            }
+        }
+
+        private void DPDestinationDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IsDestinationDataChange();
+        }
+
+        private void TBDestinationNote_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsDestinationDataChange();
+        }
+        #endregion
+
+        private void BDestinationUp_Click(object sender, RoutedEventArgs e)
+        {
+            if((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && lvDestinations.SelectedIndex > 0 && SELECTROUTE.RouteStatus == "Открыт")
+            {
+                int number = Int32.Parse(SELECTDESTINATION.Number);
+                Sources.Client.SendMessage("ChangeDestinationNumber", new String[] { number.ToString(), ((DestinationListItem)lvDestinations.Items[lvDestinations.SelectedIndex - 1]).ID });
+                Sources.Client.SendMessage("ChangeDestinationNumber", new String[] { (number - 1).ToString(), SELECTDESTINATION.ID });
+            }
+        }
+
+        private void BDestinationDown_Click(object sender, RoutedEventArgs e)
+        {
+            if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && lvDestinations.SelectedIndex >= 0 && lvDestinations.SelectedIndex < lvDestinations.Items.Count - 1) // && SELECTROUTE.RouteStatus == "Открыт")
+            {
+                int number = Int32.Parse(SELECTDESTINATION.Number);
+                Sources.Client.SendMessage("ChangeDestinationNumber", new String[] { number.ToString(), ((DestinationListItem)lvDestinations.Items[lvDestinations.SelectedIndex + 1]).ID });
+                Sources.Client.SendMessage("ChangeDestinationNumber", new String[] { (number + 1).ToString(), SELECTDESTINATION.ID });
+            }
+        }
+
+        private void BDestinationDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTROUTE.RouteStatus == "Открыт")
+            {
+                if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить этот пункт назначения из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+                {
+                    for (int i = lvDestinations.SelectedIndex + 1; i < lvDestinations.Items.Count; i++)
+                        Sources.Client.SendMessage("ChangeDestinationNumber", new String[] { i.ToString(), ((DestinationListItem)lvDestinations.Items[i]).ID });
+
+                    Sources.Client.SendMessage("DeleteDestination", new String[] { SELECTDESTINATION.ID });
+                    SELECTDESTINATION = null;
+                }
+            }
         }
     }
 }

@@ -63,6 +63,13 @@ namespace Forwarder.Sources
             return JsonConvert.SerializeObject(hashValue);
         }
 
+        public static String GetHash(String input)
+        {
+            SHA256 mySHA256 = SHA256Managed.Create();
+            byte[] hashValue = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(input));
+            return JsonConvert.SerializeObject(hashValue);
+        }
+
         public string Encrypt_AES_String(string input)
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(input);

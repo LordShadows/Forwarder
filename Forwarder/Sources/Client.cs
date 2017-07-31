@@ -95,6 +95,9 @@ namespace Forwarder.Sources
                     case "ShowWarning":
                         Dialogs.Dialog.ShowWarming(message.TextArguments[0], message.TextArguments[1], message.TextArguments[2]);
                         break;
+                    case "GlobalMessage":
+                        Dialogs.Dialog.ShowInformation("Глобальное оповещение.", message.TextArguments[0], "Глобальное оповещение");
+                        break;
                 }   
             }
             catch (NullReferenceException)

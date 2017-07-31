@@ -59,6 +59,9 @@
     <Reference Include="GMap.NET.WindowsPresentation">
       <HintPath>..\..\..\GMap.NET Build-ef25f7c93e70-20150401\Release-NETv4.0\GMap.NET.WindowsPresentation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -77,11 +80,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalWindows\Report.xaml.cs">
+      <DependentUpon>Report.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\WorkWithExcel.cs" />
     <Page Include="AdditionalWindows\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AdditionalWindows\Company.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Destination.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -94,6 +105,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AdditionalWindows\Map.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdditionalWindows\Report.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +139,9 @@
     </Compile>
     <Compile Include="AdditionalWindows\CreateAccount.xaml.cs">
       <DependentUpon>CreateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdditionalWindows\Destination.xaml.cs">
+      <DependentUpon>Destination.xaml</DependentUpon>
     </Compile>
     <Compile Include="AdditionalWindows\Engineer.xaml.cs">
       <DependentUpon>Engineer.xaml</DependentUpon>
@@ -229,6 +247,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

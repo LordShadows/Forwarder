@@ -28,11 +28,11 @@ namespace Forwarder
 
             Task.Factory.StartNew(() =>
             {
-                //Thread.Sleep(900);
+                Thread.Sleep(900);
 
                 if(!Sources.Client.InitClient())return;
                 
-                //Thread.Sleep(3000);
+                Thread.Sleep(3000);
 
                 this.Dispatcher.Invoke(() =>
                 {

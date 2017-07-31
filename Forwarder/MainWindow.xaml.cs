@@ -77,8 +77,6 @@ namespace Forwarder
 
             this.Height = SystemParameters.WorkArea.Height * 0.8 < minHeight ? minHeight : SystemParameters.WorkArea.Height * 0.8;
             this.Width = SystemParameters.WorkArea.Width * 0.8 < minWidth ? minWidth : SystemParameters.WorkArea.Width * 0.8;
-            //this.Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height * 0.1;
-            //this.Left = SystemParameters.WorkArea.Left + SystemParameters.WorkArea.Width * 0.1;
 
             InitComponent();
         }
@@ -95,9 +93,9 @@ namespace Forwarder
                     bCompanyAdd.IsEnabled = true;
                     bEngineerAdd.IsEnabled = true;
                     bForwarderAdd.IsEnabled = true;
-                    
-                    break;
+                    bTotalReport.IsEnabled = true;
 
+                    break;
                 case "Инженер":
                     Sources.Client.SendMessage("UpdateAllData", new String[] { });
 
@@ -107,17 +105,32 @@ namespace Forwarder
                     usersPage.Height = 0;
                     tcPages.Items.Remove(UsersPage);
 
-                    serverPage.Height = 0;
-                    tcPages.Items.Remove(ServerPage);
-
                     bRequestAdd.IsEnabled = true;
                     bCompanyAdd.IsEnabled = true;
 
                     tcPages.SelectedItem = RequestsPage;
                     break;
                 case "Экспедитор":
+                    Sources.Client.SendMessage("UpdateAllData", new String[] { });
+
+                    usersPage.Height = 0;
+                    tcPages.Items.Remove(UsersPage);
+
+                    forwardersPage.Height = 0;
+                    tcPages.Items.Remove(ForwardersPage);
+
+                    tcPages.SelectedItem = RequestsPage;
                     break;
                 case "Руководитель экспедиторов":
+                    Sources.Client.SendMessage("UpdateAllData", new String[] { });
+
+                    usersPage.Height = 0;
+                    tcPages.Items.Remove(UsersPage);
+
+                    bTotalReport.IsEnabled = true;
+                    bForwarderAdd.IsEnabled = true;
+
+                    tcPages.SelectedItem = RequestsPage;
                     break;
             }
         }
@@ -136,26 +149,6 @@ namespace Forwarder
             cbRouteCar.Items.Add("Платформа");
             cbRouteCar.Items.Add("Тентованный");
         }
-
-        #region Реализация скрытия всех элементов
-        private void HideAll()
-        {
-            requestsPage.Visibility = Visibility.Hidden;
-            routesPage.Visibility = Visibility.Hidden;
-            companiesPage.Visibility = Visibility.Hidden;
-            forwardersPage.Visibility = Visibility.Hidden;
-            engineersPage.Visibility = Visibility.Hidden;
-            usersPage.Visibility = Visibility.Hidden;
-            serverPage.Visibility = Visibility.Hidden;
-            RequestsPage.Visibility = Visibility.Hidden;
-            RoutesPage.Visibility = Visibility.Hidden;
-            CompaniesPage.Visibility = Visibility.Hidden;
-            ForwardersPage.Visibility = Visibility.Hidden;
-            EngineersPage.Visibility = Visibility.Hidden;
-            UsersPage.Visibility = Visibility.Hidden;
-            ServerPage.Visibility = Visibility.Hidden;
-        }
-        #endregion
 
         #region Реализация кнопок управления
         private void Close_MouseDown(object sender, MouseButtonEventArgs e)
@@ -666,7 +659,7 @@ namespace Forwarder
 
         private void ServerPage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.tcPages.SelectedItem = ServerPage;
+            //this.tcPages.SelectedItem = ServerPage;
         }
         #endregion
 
@@ -739,137 +732,7 @@ namespace Forwarder
         #endregion
 
                 
-        class UserListItem
-        {
-            public String Login { get; set; }
-            public String Name { get; set; }
-            public String Role { get; set; }
-            public String Snapping { get; set; }
-
-            public UserListItem(String login, String name, String role, String snapping)
-            {
-                this.Login = login;
-                this.Name = name;
-                this.Role = role;
-                this.Snapping = snapping;
-            }
-        }
-
-        class EngineerListItem
-        {
-            public String ID { get; set; }
-            public String Name { get; set; }
-            public String СontactNumber { get; set; }
-
-            public EngineerListItem(String id, String name, String contactNumber)
-            {
-                this.ID = id;
-                this.Name = name;
-                this.СontactNumber = contactNumber;
-            }
-        }
-
-
-        class ForwarderListItem
-        {
-            public String ID { get; set; }
-            public String Name { get; set; }
-            public String СontactNumber { get; set; }
-
-            public ForwarderListItem(String id, String name, String contactNumber)
-            {
-                this.ID = id;
-                this.Name = name;
-                this.СontactNumber = contactNumber;
-            }
-        }
-
-        class CompanyListItem
-        {
-            public String ID { get; set; }
-            public String Name { get; set; }
-            public String Country { get; set; }
-            public String City { get; set; }
-            public String NameСontactPerson { get; set; }
-            public String PhoneContactPerson { get; set; }
-
-            public CompanyListItem(String id, String name, String country, String city, String nameСontactPerson, String phoneContactPerson)
-            {
-                this.ID = id;
-                this.Name = name;
-                this.Country = country;
-                this.City = city;
-                this.NameСontactPerson = nameСontactPerson;
-                this.PhoneContactPerson = phoneContactPerson;
-            }
-        }
-        
-        class RequestListItem
-        {
-            public String ID { get; set; }
-            public String Number { get; set; }
-            public String ProductName { get; set; }
-            public String ProductWeight { get; set; }
-            public String ProductDimensions { get; set; }
-            public String Quantity { get; set; }
-            public String Company { get; set; }
-            public String Note { get; set; }
-
-            public RequestListItem(String id, String number, String productName, String productWeight, String productDimensions, String quantity, String company, String note)
-            {
-                this.ID = id;
-                this.Number = number;
-                this.ProductName = productName;
-                this.ProductWeight = productWeight;
-                this.ProductDimensions = productDimensions;
-                this.Quantity = quantity;
-                this.Company = company;
-                this.Note = note;
-            }
-        
-        }
-
-        class RouteListItem
-        {
-            public String ID { get; set; }
-            public String Number { get; set; }
-            public String Status { get; set; }
-
-            public RouteListItem(String id, String number, String status)
-            {
-                this.ID = id;
-                this.Number = number;
-                this.Status = status;
-            }
-        }
-
-        class DestinationListItem
-        {
-            public String ID { get; set; }
-            public String Number { get; set; }
-            public String Request { get; set; }
-            public String Address { get; set; }
-            public String Date { get; set; }
-
-            public DestinationListItem(String id, String number, String request, String address, String date)
-            {
-                this.ID = id;
-                this.Number = number;
-                this.Address = address;
-                this.Date = date;
-                this.Request = request;
-            }
-        }
-
-
-        private bool IsInName(String name, String str)
-        {
-            foreach (String item in name.Split(' '))
-            {
-                if (item.IndexOf(str, StringComparison.OrdinalIgnoreCase) == 0) return true;
-            }
-            return false;
-        }
+       
 
         #region ПОЛЬЗОВАТЕЛИ Реализация поиска среди пользователей
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -937,7 +800,7 @@ namespace Forwarder
             if (lvEngineers.SelectedIndex >= 0)
             {
                 SELECTENGINEER = ENGINEERS.Find(x => x.ID == ((EngineerListItem)lvEngineers.SelectedItem).ID);
-                bEngineerDelete.IsEnabled = true;
+                if (USERROLE == "Администратор") bEngineerDelete.IsEnabled = true;
                 bEngineerCopyID.IsEnabled = true;
                 bEngineerSaveChange.IsEnabled = false;
                 tbEngineerName.Text = SELECTENGINEER.Name;
@@ -1107,7 +970,7 @@ namespace Forwarder
             if (lvCompanies.SelectedIndex >= 0)
             {
                 SELECTCOMPANY = COMPANIES.Find(x => x.ID == ((CompanyListItem)lvCompanies.SelectedItem).ID);
-                bCompanyDelete.IsEnabled = true;
+                if (USERROLE == "Инженер" || USERROLE == "Администратор") bCompanyDelete.IsEnabled = true;
                 bCompanyMap.IsEnabled = true;
                 bCompanySaveChange.IsEnabled = false;
                 tbCompanyName.Text = SELECTCOMPANY.Name;
@@ -1173,6 +1036,36 @@ namespace Forwarder
                 if(USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
                     lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
             }
+
+            if(ROUTES != null)
+            {
+                for (int i = 0; i < lvRequests.Items.Count; i++)
+                {
+                    RequestListItem temp = (RequestListItem)lvRequests.Items[i];
+                    if (DESTINATIONS.Find(x => x.IDRequest == temp.ID) != null)
+                    {
+                        if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Открыт")
+                        {
+                            temp.Status = "Закреплена";
+                        }
+                        else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Закрыт")
+                        {
+                            temp.Status = "Выполняется";
+                        }
+                        else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Завершен")
+                        {
+                            temp.Status = "Выполнена";
+                        }
+                    }
+                    else
+                    {
+                        temp.Status = "В обработке";
+                    }
+                    lvRequests.Items[i] = temp;
+                    lvRequests.Items.Refresh();
+                }
+            }
+
             if (lvRequests.Items.Count > 0)
             {
                 if (SELECTREQUEST != null)
@@ -1196,8 +1089,10 @@ namespace Forwarder
             if (lvRequests.SelectedIndex >= 0)
             {
                 SELECTREQUEST = REQUESTS.Find(x => x.ID == ((RequestListItem)lvRequests.SelectedItem).ID);
-                bRequestDelete.IsEnabled = true;
-                if(USERROLE == "Руководитель экспедиторов") bRequestDistribute.IsEnabled = true;
+                if ((USERROLE == "Инженер" || USERROLE == "Администратор") && ((RequestListItem)lvRequests.SelectedItem).Status == "В обработке") bRequestDelete.IsEnabled = true;
+                else bRequestDelete.IsEnabled = false;
+                if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && ((RequestListItem)lvRequests.SelectedItem).Status == "В обработке") bRequestDistribute.IsEnabled = true;
+                else bRequestDistribute.IsEnabled = false;
                 bRequestOpen.IsEnabled = true;
                 bRequestSaveChange.IsEnabled = false;
                 tbRequestNumber.Text = SELECTREQUEST.Number;
@@ -1232,9 +1127,39 @@ namespace Forwarder
                 foreach (ClassResource.Request request in REQUESTS)
                 {
                     if (USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
-                        if (request.Number.IndexOf(tbRequestSearch.Text, StringComparison.OrdinalIgnoreCase) == 0 || request.ProductName.Contains(tbRequestSearch.Text) || COMPANIES.Find(x => x.ID == SELECTREQUEST.IDCompany).Name.Contains(tbRequestSearch.Text))
+                        if (request.Number.IndexOf(tbRequestSearch.Text, StringComparison.OrdinalIgnoreCase) == 0 || request.ProductName.Contains(tbRequestSearch.Text) || COMPANIES.Find(x => x.ID == request.IDCompany).Name.Contains(tbRequestSearch.Text))
                             lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
                 }
+
+                if (ROUTES != null)
+                {
+                    for (int i = 0; i < lvRequests.Items.Count; i++)
+                    {
+                        RequestListItem temp = (RequestListItem)lvRequests.Items[i];
+                        if (DESTINATIONS.Find(x => x.IDRequest == temp.ID) != null)
+                        {
+                            if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Открыт")
+                            {
+                                temp.Status = "Закреплена";
+                            }
+                            else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Закрыт")
+                            {
+                                temp.Status = "Выполняется";
+                            }
+                            else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Завершен")
+                            {
+                                temp.Status = "Выполнена";
+                            }
+                        }
+                        else
+                        {
+                            temp.Status = "В обработке";
+                        }
+                        lvRequests.Items[i] = temp;
+                        lvRequests.Items.Refresh();
+                    }
+                }
+
                 if (lvRequests.Items.Count > 0)
                 {
                     lvRequests.SelectedIndex = 0;
@@ -1248,6 +1173,36 @@ namespace Forwarder
                     if (USERROLE != "Инженер" || request.IDEngineer == USERSNAPPING)
                         lvRequests.Items.Add(new RequestListItem(request.ID, request.Number, request.ProductName, request.ProductWeight, request.ProductDimensions, request.Quantity, COMPANIES.Find(x => x.ID == request.IDCompany).Name, request.Note));
                 }
+
+                if (ROUTES != null)
+                {
+                    for (int i = 0; i < lvRequests.Items.Count; i++)
+                    {
+                        RequestListItem temp = (RequestListItem)lvRequests.Items[i];
+                        if (DESTINATIONS.Find(x => x.IDRequest == temp.ID) != null)
+                        {
+                            if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Открыт")
+                            {
+                                temp.Status = "Закреплена";
+                            }
+                            else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Закрыт")
+                            {
+                                temp.Status = "Выполняется";
+                            }
+                            else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Завершен")
+                            {
+                                temp.Status = "Выполнена";
+                            }
+                        }
+                        else
+                        {
+                            temp.Status = "В обработке";
+                        }
+                        lvRequests.Items[i] = temp;
+                        lvRequests.Items.Refresh();
+                    }
+                }
+
                 if (lvRequests.Items.Count > 0)
                 {
                     lvRequests.SelectedIndex = 0;
@@ -1270,7 +1225,8 @@ namespace Forwarder
             {
                 SELECTDESTINATION = DESTINATIONS.Find(x => x.ID == ((DestinationListItem)lvDestinations.SelectedItem).ID);
                 bDestinationSaveChange.IsEnabled = false;
-                if (USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") bDestinationDelete.IsEnabled = true;
+                if ((USERROLE == "Руководитель экспедиторов" || USERROLE == "Администратор") && SELECTROUTE.RouteStatus == "Открыт") bDestinationDelete.IsEnabled = true;
+                else bDestinationDelete.IsEnabled = false;
                 bDestinationOpenRequest.IsEnabled = true;
                 tbDestinationCity.Text = COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == SELECTDESTINATION.IDRequest).IDCompany).City;
                 tbDestinationNote.Text = SELECTDESTINATION.Note;
@@ -1311,6 +1267,47 @@ namespace Forwarder
                 else
                     lvRoutes.SelectedIndex = 0;
             }
+
+            for (int i = 0; i < lvRequests.Items.Count; i++)
+            {
+                RequestListItem temp = (RequestListItem)lvRequests.Items[i];
+                if (DESTINATIONS.Find(x=>x.IDRequest == temp.ID) != null)
+                {
+                    if(ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Открыт")
+                    {
+                        temp.Status = "Закреплена";
+                    }
+                    else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Закрыт")
+                    {
+                        temp.Status = "Выполняется";
+                    }
+                    else if (ROUTES.Find(x => x.ID == DESTINATIONS.Find(y => y.IDRequest == temp.ID).IDRoute).RouteStatus == "Завершен")
+                    {
+                        temp.Status = "Выполнена";
+                    }
+                }
+                else
+                {
+                    temp.Status = "В обработке";
+                }
+                lvRequests.Items[i] = temp;
+                lvRequests.Items.Refresh();
+            }
+
+            if (lvRequests.Items.Count > 0)
+            {
+                if (SELECTREQUEST != null)
+                    foreach (var item in lvRequests.Items)
+                    {
+                        if (((RequestListItem)item).ID == SELECTREQUEST.ID)
+                        {
+                            lvRequests.SelectedItem = item;
+                            break;
+                        }
+                    }
+                else
+                    lvRequests.SelectedIndex = 0;
+            }
         }
         #endregion
 
@@ -1342,7 +1339,7 @@ namespace Forwarder
                 {
                     if(tbRouteRoute.Text.LastIndexOf(COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City) != tbRouteRoute.Text.Length - COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City.Length)
                         tbRouteRoute.Text += " - " + COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City;
-                    lvDestinations.Items.Add(new DestinationListItem(item.ID, item.Number, REQUESTS.Find(y => y.ID == item.IDRequest).Number, COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City + "(" + COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).Country + ")", item.ArrivalDate.Substring(0, 10)));
+                    lvDestinations.Items.Add(new DestinationListItem(item.ID, item.Number, REQUESTS.Find(y => y.ID == item.IDRequest).Number, COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).City + "(" + COMPANIES.Find(x => x.ID == REQUESTS.Find(y => y.ID == item.IDRequest).IDCompany).Country + ")", (item.ArrivalDate != "" ? item.ArrivalDate.Substring(0, 10) : "")));
                 }
                 tbRouteRoute.Text += " - " + SELECTROUTE.CityCountryDeparture;
                 if (lvDestinations.Items.Count > 0)
@@ -1376,6 +1373,141 @@ namespace Forwarder
                 tbRouteRoute.Text = "";
                 lvDestinations.Items.Clear();
             }
+        }
+        #endregion
+
+        #region Классы для ListView
+        class UserListItem
+        {
+            public String Login { get; set; }
+            public String Name { get; set; }
+            public String Role { get; set; }
+            public String Snapping { get; set; }
+
+            public UserListItem(String login, String name, String role, String snapping)
+            {
+                this.Login = login;
+                this.Name = name;
+                this.Role = role;
+                this.Snapping = snapping;
+            }
+        }
+
+        class EngineerListItem
+        {
+            public String ID { get; set; }
+            public String Name { get; set; }
+            public String СontactNumber { get; set; }
+
+            public EngineerListItem(String id, String name, String contactNumber)
+            {
+                this.ID = id;
+                this.Name = name;
+                this.СontactNumber = contactNumber;
+            }
+        }
+
+
+        class ForwarderListItem
+        {
+            public String ID { get; set; }
+            public String Name { get; set; }
+            public String СontactNumber { get; set; }
+
+            public ForwarderListItem(String id, String name, String contactNumber)
+            {
+                this.ID = id;
+                this.Name = name;
+                this.СontactNumber = contactNumber;
+            }
+        }
+
+        class CompanyListItem
+        {
+            public String ID { get; set; }
+            public String Name { get; set; }
+            public String Country { get; set; }
+            public String City { get; set; }
+            public String NameСontactPerson { get; set; }
+            public String PhoneContactPerson { get; set; }
+
+            public CompanyListItem(String id, String name, String country, String city, String nameСontactPerson, String phoneContactPerson)
+            {
+                this.ID = id;
+                this.Name = name;
+                this.Country = country;
+                this.City = city;
+                this.NameСontactPerson = nameСontactPerson;
+                this.PhoneContactPerson = phoneContactPerson;
+            }
+        }
+
+        class RequestListItem
+        {
+            public String ID { get; set; }
+            public String Number { get; set; }
+            public String ProductName { get; set; }
+            public String ProductWeight { get; set; }
+            public String ProductDimensions { get; set; }
+            public String Quantity { get; set; }
+            public String Company { get; set; }
+            public String Note { get; set; }
+            public String Status { get; set; }
+
+            public RequestListItem(String id, String number, String productName, String productWeight, String productDimensions, String quantity, String company, String note)
+            {
+                this.ID = id;
+                this.Number = number;
+                this.ProductName = productName;
+                this.ProductWeight = productWeight;
+                this.ProductDimensions = productDimensions;
+                this.Quantity = quantity;
+                this.Company = company;
+                this.Note = note;
+            }
+
+        }
+
+        class RouteListItem
+        {
+            public String ID { get; set; }
+            public String Number { get; set; }
+            public String Status { get; set; }
+
+            public RouteListItem(String id, String number, String status)
+            {
+                this.ID = id;
+                this.Number = number;
+                this.Status = status;
+            }
+        }
+
+        class DestinationListItem
+        {
+            public String ID { get; set; }
+            public String Number { get; set; }
+            public String Request { get; set; }
+            public String Address { get; set; }
+            public String Date { get; set; }
+
+            public DestinationListItem(String id, String number, String request, String address, String date)
+            {
+                this.ID = id;
+                this.Number = number;
+                this.Address = address;
+                this.Date = date;
+                this.Request = request;
+            }
+        }
+
+
+        private bool IsInName(String name, String str)
+        {
+            foreach (String item in name.Split(' '))
+            {
+                if (item.IndexOf(str, StringComparison.OrdinalIgnoreCase) == 0) return true;
+            }
+            return false;
         }
         #endregion
 
@@ -1925,5 +2057,98 @@ namespace Forwarder
                 }
             }
         }
+
+        private void BRequestDistribute_Click(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Destination destination = new AdditionalWindows.Destination(ROUTES, SELECTREQUEST.ID, SELECTREQUEST.Number);
+            destination.Show();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Sources.WorkWithExcel.ForwardersOnBusinessTrips(FORWARDERS, ROUTES, DESTINATIONS, COMPANIES, REQUESTS);
+        }
+
+        private void BStatusRequest_Click(object sender, RoutedEventArgs e)
+        {
+            if(USERROLE == "Инженер")
+            {
+                Sources.WorkWithExcel.StatusRequest(ROUTES, DESTINATIONS, REQUESTS.FindAll(x => x.IDEngineer == USERSNAPPING));
+            }
+            else
+            {
+                Sources.WorkWithExcel.StatusRequest(ROUTES, DESTINATIONS, REQUESTS);
+            }
+        }
+
+        private void BReportDestination_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvDestinations.Items.Count > 0)
+            {
+                Sources.WorkWithExcel.ReportDestination(DESTINATIONS.FindAll(x => x.IDRoute == SELECTROUTE.ID), REQUESTS, COMPANIES);
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            AdditionalWindows.Report report = new AdditionalWindows.Report(FORWARDERS.FindAll(x => ROUTES.Find(y => y.IDForwarder == x.ID && y.RouteStatus != "Открыт") != null), ROUTES, DESTINATIONS, COMPANIES, REQUESTS);
+            report.Show();
+        }
+
+        private void BRequestDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dialogs.Dialog.ShowYesNoDialog("Вы действительно хотите удалить эту заявку из базы?", "После удаления восстановление невозможно.", "Удаление записи"))
+            {
+                Sources.Client.SendMessage("DeleteRequest", new String[] { SELECTREQUEST.ID });
+                SELECTREQUEST = null;
+            }
+        }
+
+        private void BRequestSaveChange_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbRequestDimensions.Text == "" || tbRequestWeight.Text == "" || tbRequestQuantity.Text == "")
+            {
+                Dialogs.Dialog.ShowWarming("Некорректное заполнение!", "Все поля, отмеченные *, должны быть заполнены.", "Некорректное заполнение");
+                return;
+            }
+
+            ClassResource.Request request = new ClassResource.Request(SELECTREQUEST.ID, null, null, tbRequestWeight.Text, tbRequestDimensions.Text, tbRequestQuantity.Text, null, null, null, null);
+            Sources.Client.SendMessage("UpdateRequest", new String[] { JsonConvert.SerializeObject(request) });
+            bRequestSaveChange.IsEnabled = false;
+        }
+
+
+        #region IsRequestDataChange
+        private void IsRequestDataChange()
+        {
+            if ((USERROLE == "Инженер" || USERROLE == "Администратор") && SELECTREQUEST != null && lvRequests.SelectedItem != null)
+            {
+                if ((tbRequestDimensions.Text != SELECTREQUEST.ProductDimensions ||
+                    tbRequestWeight.Text != SELECTREQUEST.ProductWeight ||
+                    tbRequestQuantity.Text != SELECTREQUEST.Quantity) && ((RequestListItem)lvRequests.SelectedItem).Status == "В обработке")
+                {
+                    bRequestSaveChange.IsEnabled = true;
+                }
+                else
+                {
+                    bRequestSaveChange.IsEnabled = false;
+                }
+            }
+        }
+        private void TBRequestWeight_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRequestDataChange();
+        }
+
+        private void TBRequestDimensions_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRequestDataChange();
+        }
+
+        private void TbRequestQuantity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            IsRequestDataChange();
+        }
+        #endregion
     }
 }

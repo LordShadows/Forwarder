@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Forwarder.AdditionalWindows.About" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAMAACAAAAAAAABAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\About.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Authorization" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACCAAAAAAAAABQABAAgAACgASAICAAAAACAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Authorization.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Company" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Company.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.CreateAccount" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AdditionalWindows\CreateAccount.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Destination" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAABAAAAAAACAACAAQAAAAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Destination.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Engineer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Engineer.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.ForwarderWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Forwarder.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Map" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAhAAAAAIAAAAAAAAAMABCAQAABAgABIAAABACAE=</HashCode>
+      <FileName>AdditionalWindows\Map.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Request" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAgAAAAAAAAAABAAAAMEACAACAACgABAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Request.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Settings" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAMAACAAAAAAAABAAAAAACAE=</HashCode>
+      <FileName>AdditionalWindows\Settings.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.Splash" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACABAABAABAAAAgAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>AdditionalWindows\Splash.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.AdditionalWindows.User" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAAACAAAAIAAAAAAAEAAAAAAjAACAAAAAAAAAAAQCAE=</HashCode>
+      <FileName>AdditionalWindows\User.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.App" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>N5lyBtr8Tpv9EAVAiWC2RM4J7kBHOV2nuRkwXDtdCpk=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.ClassResource.Company">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAIAAAAAEQAAAIAAAACAAAAAAAAAIA=</HashCode>
+      <FileName>ClassResource\Company.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.Destination">
+    <Position X="9.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAEAACAAAAAAAAAAAAAwAAAEAAAA=</HashCode>
+      <FileName>ClassResource\Destination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.Engineer">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>ClassResource\Engineer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.Forwarder">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>ClassResource\Forwarder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.Request">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAkAAAAEAAAABAAAAAAAgBAAAAgAEIAAA=</HashCode>
+      <FileName>ClassResource\Request.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.Route">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAIAgAAEAAAAAAQAAAEAAAAAQAAAAAEgAAA=</HashCode>
+      <FileName>ClassResource\Route.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.ClassResource.User">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAEABAAAQAAAAAABACAAAQAAAAAAA=</HashCode>
+      <FileName>ClassResource\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Dialogs.Dialog">
+    <Position X="7.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQAAAAAAAAAgAAAAACQAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dialogs\Dialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Dialogs.ErrorMessageDialog" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEACAAAAAAAAAAAAAAACAE=</HashCode>
+      <FileName>Dialogs\ErrorMessageDialog.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.Dialogs.InformationMessageDialog" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEACAAAAAAAAAAAAAAACAE=</HashCode>
+      <FileName>Dialogs\InformationMessageDialog.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.Dialogs.WarningMessageDialog" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEACAAAAAAAAAAAAAAACAE=</HashCode>
+      <FileName>Dialogs\WarningMessageDialog.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.Dialogs.YesNoMessageDialog" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAQACAAAAAAAAAAAEAAACAE=</HashCode>
+      <FileName>Dialogs\YesNoMessageDialog.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Forwarder.Properties.Resources" Collapsed="true">
+    <Position X="11" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEgQBBEAIAECEAAxgAAxFYQgA0AEIAAiBCAAQgAIAcA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Properties.Settings" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAIEAAAAAJAAAACAIAAAAAAgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Sources.Client">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAoAAAIAAAAAGAAAAAAEAAEAACAAAAAAgAAAAQ=</HashCode>
+      <FileName>Sources\Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Sources.Cryptography">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kAABAAAAAAEAQAAABAAAAAgACACAAAACAAgAAAAAAQA=</HashCode>
+      <FileName>Sources\Cryptography.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Sources.Functions">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEACAAABACAAAQAAAAAAQIAgAAAAAACAAAAADEAAAA=</HashCode>
+      <FileName>Sources\Functions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Forwarder.Sources.Message">
+    <Position X="5.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAQAAAAAAAAAAAAE=</HashCode>
+      <FileName>Sources\Message.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

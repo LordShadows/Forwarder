@@ -30,9 +30,6 @@ namespace Forwarder.AdditionalWindows
         {
             InitializeComponent();
             Sources.Functions.AUTHORIZATION = this;
-
-            this.tbLogin.Text = "Fox";
-            this.tbPassword.Password = "12345";
         }
 
         #region Реализация перемещения окна
@@ -123,7 +120,7 @@ namespace Forwarder.AdditionalWindows
             {
                 isWaiting = true;
                 bGo.IsEnabled = true;
-                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, Sources.Cryptography.GetHash(tbPassword.Password) });
             }
         }
 
@@ -133,7 +130,7 @@ namespace Forwarder.AdditionalWindows
             {
                 isWaiting = true;
                 bGo.IsEnabled = true;
-                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, Sources.Cryptography.GetHash(tbPassword.Password) });
             }
         }
 
@@ -143,7 +140,7 @@ namespace Forwarder.AdditionalWindows
             {
                 isWaiting = true;
                 bGo.IsEnabled = true;
-                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, tbPassword.Password });
+                Sources.Client.SendMessage("AuthenticationAttempt", new String[] { tbLogin.Text, Sources.Cryptography.GetHash(tbPassword.Password) });
             }
         }
 
